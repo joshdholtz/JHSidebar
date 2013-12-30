@@ -1,0 +1,7 @@
+pod "JHSidebar", :path => "../JHSidebar.podspec"
+
+target "Demo" do
+end
+
+target "DemoTests" do
+end
