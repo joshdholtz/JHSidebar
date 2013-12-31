@@ -48,6 +48,11 @@
 }
 
 - (void)setup {
+    _leftOpenAnimationLength = 0.35;
+    _leftCloseAnimationLength = 0.35f;
+    _rightOpenAnimationLength = 0.35f;
+    _rightCloseAnimationLength = 0.35f;
+    
     _leftSidebarWidth = 270.0f;
     _rightSidebarWidth = 270.0f;
 }
@@ -103,20 +108,7 @@
 
 - (void)showLeftSidebar:(BOOL)show {
     // Initializes left sidebar view if not already attached
-    if (_viewContainerLeft == nil) {
-        _viewContainerLeft = [[UIView alloc] initWithFrame:CGRectMake(-CGRectGetWidth(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-        
-        UIView *viewContainerLeftInner = [[UIView alloc] initWithFrame:_viewContainerLeft.frame];
-        [_viewContainerLeft addSubview:viewContainerLeftInner];
-        
-        CGRect frame = viewContainerLeftInner.frame;
-        frame.origin.x = _leftSidebarWidth - viewContainerLeftInner.frame.size.width;
-        [viewContainerLeftInner setFrame:frame];
-        
-        [self.view addSubview:_viewContainerLeft];
-        
-        [viewContainerLeftInner addSubview:_leftViewController.view];
-    }
+    [self attachLeftSidebar];
     
     // Shows and hides left sidebar view
     if (show == YES) {
@@ -124,46 +116,49 @@
         CGRect frame = _viewContainerLeft.frame;
         frame.origin.x = 0;
         
-        [UIView animateWithDuration:0.35 animations:^{
+        [UIView animateWithDuration:_leftOpenAnimationLength animations:^{
             [_viewContainerLeft setFrame:frame];
         } completion:^(BOOL finished) {
             
         }];
     } else {
         
+        CGRect frame = _viewContainerLeft.frame;
+        frame.origin.x = -CGRectGetWidth(_viewContainerLeft.frame);
+        
+        [UIView animateWithDuration:_leftCloseAnimationLength animations:^{
+            [_viewContainerLeft setFrame:frame];
+        } completion:^(BOOL finished) {
+            
+        }];
     }
 }
 
 - (void)showRightSidebar:(BOOL)show {
-    // Initializes left sidebar view if not already attached
-    if (_viewContainerRight == nil) {
-        _viewContainerRight = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-        
-        UIView *viewContainerRightInner = [[UIView alloc] initWithFrame:_viewContainerRight.frame];
-        [_viewContainerRight addSubview:viewContainerRightInner];
-        
-        CGRect frame = viewContainerRightInner.frame;
-        frame.origin.x = viewContainerRightInner.frame.size.width - _rightSidebarWidth;
-        [viewContainerRightInner setFrame:frame];
-        
-        [self.view addSubview:_viewContainerRight];
-        
-        [viewContainerRightInner addSubview:_rightViewController.view];
-    }
+    // Initializes right sidebar view if not already attached
+    [self attachRightSidebar];
     
-    // Shows and hides left sidebar view
+    // Shows and hides right sidebar view
     if (show == YES) {
         
         CGRect frame = _viewContainerRight.frame;
         frame.origin.x = 0;
         
-        [UIView animateWithDuration:0.35 animations:^{
+        [UIView animateWithDuration:_rightOpenAnimationLength animations:^{
             [_viewContainerRight setFrame:frame];
         } completion:^(BOOL finished) {
             
         }];
     } else {
-        NSLog(@"Show - NO");
+
+        CGRect frame = _viewContainerRight.frame;
+        frame.origin.x = CGRectGetWidth(self.view.frame);
+        
+        [UIView animateWithDuration:_rightCloseAnimationLength animations:^{
+            [_viewContainerRight setFrame:frame];
+        } completion:^(BOOL finished) {
+            
+        }];
     }
 }
 
@@ -193,6 +188,66 @@
     
     _rightViewController = rightViewController;
     [self addChildViewController:self.leftViewController];
+}
+
+#pragma mark - Private
+
+- (void)attachLeftSidebar {
+    if (_viewContainerLeft == nil) {
+        // Creating left container view (same size as self.view)
+        _viewContainerLeft = [[UIView alloc] initWithFrame:CGRectMake(-CGRectGetWidth(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+        
+        // Places an inner container (to the set width in the settings) inside the container view
+        UIView *viewContainerLeftInner = [[UIView alloc] initWithFrame:_viewContainerLeft.frame];
+        [_viewContainerLeft addSubview:viewContainerLeftInner];
+        
+        CGRect frame = viewContainerLeftInner.frame;
+        frame.origin.x = _leftSidebarWidth - viewContainerLeftInner.frame.size.width;
+        [viewContainerLeftInner setFrame:frame];
+        
+        [self.view addSubview:_viewContainerLeft];
+        
+        // Adds left view controller subview
+        [viewContainerLeftInner addSubview:_leftViewController.view];
+        
+        // Adidng tap gesture to close left sidebar
+        UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapCloseLeftSidebar:)];
+        [_viewContainerLeft addGestureRecognizer:tgr];
+    }
+}
+
+- (void)attachRightSidebar {
+    if (_viewContainerRight == nil) {
+        // Creating right container view (same size as self.view)
+        _viewContainerRight = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+        
+        // Places an inner container (to the set width in the settings) inside the container view
+        UIView *viewContainerRightInner = [[UIView alloc] initWithFrame:_viewContainerRight.frame];
+        [_viewContainerRight addSubview:viewContainerRightInner];
+        
+        CGRect frame = viewContainerRightInner.frame;
+        frame.origin.x = viewContainerRightInner.frame.size.width - _rightSidebarWidth;
+        [viewContainerRightInner setFrame:frame];
+        
+        [self.view addSubview:_viewContainerRight];
+        
+        // Adds right view controller subview
+        [viewContainerRightInner addSubview:_rightViewController.view];
+        
+        // Adidng tap gesture to close right sidebar
+        UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapCloseRightSidebar:)];
+        [_viewContainerRight addGestureRecognizer:tgr];
+    }
+}
+
+#pragma mark - Actions
+
+- (void)onTapCloseLeftSidebar:(id)sender {
+    [self showLeftSidebar:NO];
+}
+
+- (void)onTapCloseRightSidebar:(id)sender {
+    [self showRightSidebar:NO];
 }
 
 @end

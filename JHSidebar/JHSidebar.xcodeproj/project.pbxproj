@@ -400,6 +400,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JHSidebar/JHSidebar-Prefix.pch";
 				INFOPLIST_FILE = "JHSidebar/JHSidebar-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -413,6 +414,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JHSidebar/JHSidebar-Prefix.pch";
 				INFOPLIST_FILE = "JHSidebar/JHSidebar-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -479,6 +481,7 @@
 				03F2D9951872363500C69576 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		03F2D9961872363500C69576 /* Build configuration list for PBXNativeTarget "JHSidebarTests" */ = {
 			isa = XCConfigurationList;
@@ -487,6 +490,7 @@
 				03F2D9981872363500C69576 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

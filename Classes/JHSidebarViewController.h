@@ -14,6 +14,10 @@
 @property (nonatomic, strong) UIViewController *leftViewController;
 @property (nonatomic, strong) UIViewController *rightViewController;
 
+@property (nonatomic, assign) CGFloat leftOpenAnimationLength;
+@property (nonatomic, assign) CGFloat leftCloseAnimationLength;
+@property (nonatomic, assign) CGFloat rightOpenAnimationLength;
+@property (nonatomic, assign) CGFloat rightCloseAnimationLength;
 @property (nonatomic, assign) NSInteger leftSidebarWidth;
 @property (nonatomic, assign) NSInteger rightSidebarWidth;
 
