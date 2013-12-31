@@ -42,10 +42,12 @@
 
 - (void)onClickLeft:(id)sender {
     [self.sidebarViewController showLeftSidebar:YES];
+    [self.sidebarViewController toggleLeftSidebar];
 }
 
 - (void)onClickRight:(id)sender {
     [self.sidebarViewController showRightSidebar:YES];
+    [self.sidebarViewController toggleRightSidebar];
 }
 
 @end
