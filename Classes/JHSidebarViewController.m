@@ -81,6 +81,10 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
     // Creating left container view (same size as self.view)
     if (_viewContainerLeft == nil) {
@@ -96,12 +100,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         block(self);
     }
     [_operationQueue removeAllObjects];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -199,6 +197,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     if (_panGestureMain == nil) {
         
         [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
+            [sidebarViewController.viewContainerMain setUserInteractionEnabled:YES];
             sidebarViewController.panGestureMain = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanMain:)];
             [sidebarViewController.viewContainerMain addGestureRecognizer:sidebarViewController.panGestureMain];
         }];
@@ -210,7 +209,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         }
         [_operationQueue removeAllObjects];
     }
-    
+
 }
 
 - (void)toggleLeftSidebar {
@@ -238,6 +237,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             mainFrame.origin.x = _leftSidebarWidth;
         }
         
+        [_viewContainerLeft setHidden:NO];
         [UIView animateWithDuration:_leftOpenAnimationLength animations:^{
             [_viewContainerLeft setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
@@ -247,18 +247,18 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     } else {
         
         CGRect frame = _viewContainerLeft.frame;
-        frame.origin.x = -CGRectGetWidth(_viewContainerLeft.frame);
+        frame.origin.x = -_leftSidebarWidth;
         
         CGRect mainFrame = _viewContainerMain.frame;
         if (_slideMainViewWithLeftSidebar == YES) {
-            mainFrame.origin.x = 0.0f;;
+            mainFrame.origin.x = 0.0f;
         }
         
         [UIView animateWithDuration:_leftCloseAnimationLength animations:^{
             [_viewContainerLeft setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
-            
+            [_viewContainerLeft setHidden:YES];
         }];
     }
 }
@@ -280,6 +280,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             mainFrame.origin.x = -_rightSidebarWidth;
         }
         
+        [_viewContainerRight setHidden:NO];
         [UIView animateWithDuration:_rightOpenAnimationLength animations:^{
             [_viewContainerRight setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
@@ -289,7 +290,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     } else {
 
         CGRect frame = _viewContainerRight.frame;
-        frame.origin.x = CGRectGetWidth(self.view.frame);
+        frame.origin.x = _rightSidebarWidth;
         
         CGRect mainFrame = _viewContainerMain.frame;
         if (_slideMainViewWithRightSidebar == YES) {
@@ -300,7 +301,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             [_viewContainerRight setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
-            
+            [_viewContainerRight setHidden:YES];
         }];
     }
 }
@@ -348,6 +349,10 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 - (void)attachLeftSidebar {
     if (_viewContainerInnerLeft == nil) {
         
+        CGRect frameContainer = _viewContainerLeft.frame;
+        frameContainer.origin.x = -_leftSidebarWidth;
+        [_viewContainerLeft setFrame:frameContainer];
+        
         // Places an inner container (to the set width in the settings) inside the container view
         _viewContainerInnerLeft = [[UIView alloc] initWithFrame:_viewContainerLeft.frame];
         [_viewContainerLeft addSubview:_viewContainerInnerLeft];
@@ -365,6 +370,10 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 - (void)attachRightSidebar {
     if (_viewContainerInnerRight == nil) {
+        
+        CGRect frameContainer = _viewContainerRight.frame;
+        frameContainer.origin.x = _rightSidebarWidth;
+        [_viewContainerRight setFrame:frameContainer];
         
         // Places an inner container (to the set width in the settings) inside the container view
         _viewContainerInnerRight = [[UIView alloc] initWithFrame:_viewContainerRight.frame];
@@ -395,6 +404,14 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     if (pgr.state == UIGestureRecognizerStateBegan) {
 
     } else if (pgr.state == UIGestureRecognizerStateChanged) {
+        if (_slideMainViewWithLeftSidebar == YES) {
+            CGPoint center = _viewContainerMain.center;
+            CGPoint translation = [pgr translationInView:_viewContainerMain.superview];
+            center = CGPointMake(center.x + translation.x,
+                                 center.y);
+            _viewContainerMain.center = center;
+        }
+        
         CGPoint center = pgr.view.center;
         CGPoint translation = [pgr translationInView:pgr.view.superview];
         center = CGPointMake(center.x + translation.x,
@@ -411,6 +428,14 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     if (pgr.state == UIGestureRecognizerStateBegan) {
         
     } else if (pgr.state == UIGestureRecognizerStateChanged) {
+        if (_slideMainViewWithRightSidebar == YES) {
+            CGPoint center = _viewContainerMain.center;
+            CGPoint translation = [pgr translationInView:_viewContainerMain.superview];
+            center = CGPointMake(center.x + translation.x,
+                                 center.y);
+            _viewContainerMain.center = center;
+        }
+        
         CGPoint center = pgr.view.center;
         CGPoint translation = [pgr translationInView:pgr.view.superview];
         center = CGPointMake(center.x + translation.x,
@@ -433,6 +458,8 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         if ((CGRectGetWidth(self.view.frame) / 2.0f) > _panGestureStartPoint.x) {
             if (_leftViewController != nil) {
+                [_viewContainerLeft setHidden:NO];
+                
                 // Translations main
                 if (_slideMainViewWithLeftSidebar == YES) {
                     CGPoint center = pgr.view.center;
@@ -451,6 +478,8 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             }
         } else {
             if (_rightViewController != nil) {
+                [_viewContainerRight setHidden:NO];
+                
                 // Translations main
                 if (_slideMainViewWithRightSidebar == YES) {
                     CGPoint center = pgr.view.center;

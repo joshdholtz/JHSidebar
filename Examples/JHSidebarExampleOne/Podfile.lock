@@ -1,0 +1,14 @@
+PODS:
+  - JHSidebar (0.0.1)
+
+DEPENDENCIES:
+  - JHSidebar (from `../../JHSidebar.podspec`)
+
+EXTERNAL SOURCES:
+  JHSidebar:
+    :path: ../../JHSidebar.podspec
+
+SPEC CHECKSUMS:
+  JHSidebar: 90be81800846e801b50109bbc6075de698569a17
+
+COCOAPODS: 0.29.0
