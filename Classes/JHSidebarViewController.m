@@ -86,17 +86,17 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    CGRect frame = self.view.frame;
+    
     // Creating left container view (same size as self.view)
     if (_viewContainerLeft == nil) {
-        _viewContainerLeft = [[UIView alloc] initWithFrame:CGRectMake(-CGRectGetWidth(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-        [_viewContainerLeft setBackgroundColor:[UIColor orangeColor]];
-        [_viewContainerLeft setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleWidth];
+        _viewContainerLeft = [[UIView alloc] initWithFrame:CGRectMake(-CGRectGetWidth(frame), CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame))];
+        [_viewContainerLeft setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     }
     
     // Creating right container view (same size as self.view)
     if (_viewContainerRight == nil) {
-        _viewContainerRight = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-        [_viewContainerRight setBackgroundColor:[UIColor redColor]];
+        _viewContainerRight = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(frame), CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame))];
         [_viewContainerRight setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     }
     
@@ -230,7 +230,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 }
 
 - (void)toggleRightSidebar {
-    
+    [self showRightSidebar:![self isRightMoreOpenThanClosed]];
 }
 
 - (void)showLeftSidebar:(BOOL)show {
@@ -250,7 +250,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             mainFrame.origin.x = _leftSidebarWidth;
         }
         
-        [_viewContainerLeft setHidden:NO];
+        [self hideLeftSidebar:NO];
         [UIView animateWithDuration:_leftOpenAnimationLength animations:^{
             [_viewContainerLeft setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
@@ -271,7 +271,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             [_viewContainerLeft setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
-            [_viewContainerLeft setHidden:YES];
+            [self hideLeftSidebar:YES];
         }];
     }
 }
@@ -286,18 +286,14 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     if (show == YES) {
         
         CGRect frame = _viewContainerRight.frame;
-        NSLog(@"X to animate from - %f", CGRectGetWidth(_viewContainerMain.frame));
-        frame.origin.x = CGRectGetWidth(_viewContainerMain.frame);
-        [_viewContainerRight setFrame:frame];
-        
-        frame.origin.x = CGRectGetWidth(_viewContainerMain.frame) - CGRectGetWidth(_viewContainerRight.frame);
+        frame.origin.x = 0.0f;
         
         CGRect mainFrame = _viewContainerMain.frame;
         if (_slideMainViewWithRightSidebar == YES) {
             mainFrame.origin.x = -_rightSidebarWidth;
         }
         
-        [_viewContainerRight setHidden:NO];
+        [self hideRightSidebar:NO];;
         [UIView animateWithDuration:_rightOpenAnimationLength animations:^{
             [_viewContainerRight setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
@@ -307,7 +303,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     } else {
 
         CGRect frame = _viewContainerRight.frame;
-        frame.origin.x = CGRectGetWidth(_viewContainerMain.frame) - (CGRectGetWidth(_viewContainerRight.frame) - _rightSidebarWidth);
+        frame.origin.x = _rightSidebarWidth;
         
         CGRect mainFrame = _viewContainerMain.frame;
         if (_slideMainViewWithRightSidebar == YES) {
@@ -318,7 +314,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             [_viewContainerRight setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
-            [_viewContainerRight setHidden:YES];
+            [self hideRightSidebar:YES];
         }];
     }
 }
@@ -333,7 +329,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     
     _viewContainerMain = [[UIView alloc] initWithFrame:self.view.frame];
     [_viewContainerMain setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
-    [_viewContainerMain setBackgroundColor:[UIColor yellowColor]];
     [self.view insertSubview:_viewContainerMain atIndex:0];
     
     [_viewContainerMain addSubview:_mainViewController.view];
@@ -372,8 +367,11 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 #pragma mark - Private
 
 - (BOOL)isLeftMoreOpenThanClosed {
+    if (_viewContainerInnerLeft == nil) return NO;
+    
     NSInteger turningPoint = (_leftSidebarWidth / 2.0f);
-    return (turningPoint < CGRectGetMaxX(_viewContainerLeft.frame));
+    NSLog(@"Max X of container left - %f", CGRectGetMaxX(_viewContainerLeft.frame));
+    return (turningPoint > abs(CGRectGetMinX(_viewContainerLeft.frame)));
 }
 
 - (BOOL)isRightMoreOpenThanClosed {
@@ -390,7 +388,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Places an inner container (to the set width in the settings) inside the container view
         _viewContainerInnerLeft = [[UIView alloc] initWithFrame:_viewContainerLeft.frame];
-        [_viewContainerLeft setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+        [_viewContainerInnerLeft setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
         [_viewContainerLeft addSubview:_viewContainerInnerLeft];
         
         CGRect frame = _viewContainerInnerLeft.frame;
@@ -413,11 +411,11 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Places an inner container (to the set width in the settings) inside the container view
         _viewContainerInnerRight = [[UIView alloc] initWithFrame:_viewContainerRight.frame];
-        [_viewContainerRight setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
+        [_viewContainerInnerRight setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
         [_viewContainerRight addSubview:_viewContainerInnerRight];
         
         CGRect frame = _viewContainerInnerRight.frame;
-        frame.origin.x = _viewContainerInnerRight.frame.size.width - _rightSidebarWidth;
+        frame.origin.x = CGRectGetWidth(_viewContainerInnerRight.frame) - _rightSidebarWidth;
         [_viewContainerInnerRight setFrame:frame];
         
         [self.view addSubview:_viewContainerRight];
@@ -425,6 +423,33 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         // Adds right view controller subview
         [_viewContainerInnerRight addSubview:_rightViewController.view];
     }
+}
+
+- (void)hideLeftSidebar:(BOOL)hide {
+    if (hide == YES) {
+        [_viewContainerLeft setHidden:YES];
+//        _viewContainerLeft.center = _viewContainerMain.center;
+    } else {
+//        CGRect frame = _viewContainerLeft.frame;
+//        frame.origin.x = -_leftSidebarWidth;
+//        [_viewContainerLeft setFrame:frame];
+        
+        [_viewContainerLeft setHidden:NO];
+    }
+}
+
+- (void)hideRightSidebar:(BOOL)hide {
+    if (hide == YES) {
+        [_viewContainerRight setHidden:YES];
+//        _viewContainerLeft.center = _viewContainerMain.center;
+    } else {
+//        CGRect frame = _viewContainerRight.frame;
+//        frame.origin.x = _rightSidebarWidth;
+//        [_viewContainerRight setFrame:frame];
+        
+        [_viewContainerRight setHidden:NO];
+    }
+    
 }
 
 #pragma mark - Actions
@@ -438,177 +463,177 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 }
 
 - (void)onPanLeftSidebar:(UIPanGestureRecognizer*)pgr {
-    if (pgr.state == UIGestureRecognizerStateBegan) {
-
-    } else if (pgr.state == UIGestureRecognizerStateChanged) {
-        
-        CGPoint center = pgr.view.center;
-        CGPoint translation = [pgr translationInView:pgr.view.superview];
-        center = CGPointMake(center.x + translation.x,
-                             center.y);
-        
-        BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
-        if (isAtMax == YES) {
-            center.x = (CGRectGetWidth(self.view.frame) - _leftSidebarWidth) - (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
-        }
-        BOOL isAtMin = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(self.view.frame);
-        if (isAtMin == YES) {
-            center.x = (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
-        }
-        pgr.view.center = center;
-        
-        if (_slideMainViewWithLeftSidebar == YES) {
-            CGPoint center2 = _viewContainerMain.center;
-            CGPoint translation2 = [pgr translationInView:_viewContainerMain.superview];
-            center2 = CGPointMake(center2.x + translation2.x,
-                                 center2.y);
-            if (isAtMax == YES) {
-                center2.x = CGRectGetWidth(_viewContainerMain.frame) / 2.0f;
-            }
-            if (isAtMin == YES) {
-                center2.x = (CGRectGetWidth(self.view.frame) / 2.0f) + _leftSidebarWidth;
-            }
-            
-            _viewContainerMain.center = center2;
-        }
-        
-        [pgr setTranslation:CGPointZero inView:pgr.view.superview];
-
-    } else if (pgr.state == UIGestureRecognizerStateEnded) {
-        [self showLeftSidebar:[self isLeftMoreOpenThanClosed]];
-    }
+//    if (pgr.state == UIGestureRecognizerStateBegan) {
+//
+//    } else if (pgr.state == UIGestureRecognizerStateChanged) {
+//        
+//        CGPoint center = pgr.view.center;
+//        CGPoint translation = [pgr translationInView:pgr.view.superview];
+//        center = CGPointMake(center.x + translation.x,
+//                             center.y);
+//        
+//        BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
+//        if (isAtMax == YES) {
+//            center.x = (CGRectGetWidth(self.view.frame) - _leftSidebarWidth) - (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
+//        }
+//        BOOL isAtMin = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(self.view.frame);
+//        if (isAtMin == YES) {
+//            center.x = (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
+//        }
+//        pgr.view.center = center;
+//        
+//        if (_slideMainViewWithLeftSidebar == YES) {
+//            CGPoint center2 = _viewContainerMain.center;
+//            CGPoint translation2 = [pgr translationInView:_viewContainerMain.superview];
+//            center2 = CGPointMake(center2.x + translation2.x,
+//                                 center2.y);
+//            if (isAtMax == YES) {
+//                center2.x = CGRectGetWidth(_viewContainerMain.frame) / 2.0f;
+//            }
+//            if (isAtMin == YES) {
+//                center2.x = (CGRectGetWidth(self.view.frame) / 2.0f) + _leftSidebarWidth;
+//            }
+//            
+//            _viewContainerMain.center = center2;
+//        }
+//        
+//        [pgr setTranslation:CGPointZero inView:pgr.view.superview];
+//
+//    } else if (pgr.state == UIGestureRecognizerStateEnded) {
+//        [self showLeftSidebar:[self isLeftMoreOpenThanClosed]];
+//    }
 }
 
 - (void)onPanRightSidebar:(UIPanGestureRecognizer*)pgr {
-    if (pgr.state == UIGestureRecognizerStateBegan) {
-        
-    } else if (pgr.state == UIGestureRecognizerStateChanged) {
-        
-        CGPoint center = pgr.view.center;
-        CGPoint translation = [pgr translationInView:pgr.view.superview];
-        center = CGPointMake(center.x + translation.x,
-                             center.y);
-        
-        BOOL isAtMax = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) > _rightSidebarWidth;
-        if (isAtMax == YES) {
-            center.x = _rightSidebarWidth + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f);
-        }
-        BOOL isAtMin = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < 0.0f;
-        if (isAtMin == YES) {
-            center.x = (CGRectGetWidth(_viewContainerRight.frame) / 2.0f);
-        }
-        pgr.view.center = center;
-        
-        if (_slideMainViewWithRightSidebar == YES) {
-            CGPoint center2 = _viewContainerMain.center;
-            CGPoint translation2 = [pgr translationInView:_viewContainerMain.superview];
-            center2 = CGPointMake(center2.x + translation2.x,
-                                 center2.y);
-            if (isAtMax == YES) {
-                center2.x = CGRectGetWidth(_viewContainerMain.frame) / 2.0f;
-            }
-            if (isAtMin == YES) {
-                center2.x = (CGRectGetWidth(self.view.frame) - _rightSidebarWidth) - (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
-            }
-            _viewContainerMain.center = center2;
-        }
-        
-        [pgr setTranslation:CGPointZero inView:pgr.view.superview];
-        
-    } else if (pgr.state == UIGestureRecognizerStateEnded) {
-        [self showRightSidebar:[self isRightMoreOpenThanClosed]];
-    }
+//    if (pgr.state == UIGestureRecognizerStateBegan) {
+//        
+//    } else if (pgr.state == UIGestureRecognizerStateChanged) {
+//        
+//        CGPoint center = pgr.view.center;
+//        CGPoint translation = [pgr translationInView:pgr.view.superview];
+//        center = CGPointMake(center.x + translation.x,
+//                             center.y);
+//        
+//        BOOL isAtMax = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) > _rightSidebarWidth;
+//        if (isAtMax == YES) {
+//            center.x = _rightSidebarWidth + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f);
+//        }
+//        BOOL isAtMin = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < 0.0f;
+//        if (isAtMin == YES) {
+//            center.x = (CGRectGetWidth(_viewContainerRight.frame) / 2.0f);
+//        }
+//        pgr.view.center = center;
+//        
+//        if (_slideMainViewWithRightSidebar == YES) {
+//            CGPoint center2 = _viewContainerMain.center;
+//            CGPoint translation2 = [pgr translationInView:_viewContainerMain.superview];
+//            center2 = CGPointMake(center2.x + translation2.x,
+//                                 center2.y);
+//            if (isAtMax == YES) {
+//                center2.x = CGRectGetWidth(_viewContainerMain.frame) / 2.0f;
+//            }
+//            if (isAtMin == YES) {
+//                center2.x = (CGRectGetWidth(self.view.frame) - _rightSidebarWidth) - (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
+//            }
+//            _viewContainerMain.center = center2;
+//        }
+//        
+//        [pgr setTranslation:CGPointZero inView:pgr.view.superview];
+//        
+//    } else if (pgr.state == UIGestureRecognizerStateEnded) {
+//        [self showRightSidebar:[self isRightMoreOpenThanClosed]];
+//    }
 }
 
 - (void)onPanMain:(UIPanGestureRecognizer*)pgr {
-    if (pgr.state == UIGestureRecognizerStateBegan) {
-        [self attachLeftSidebar];
-        [self attachRightSidebar];
-        
-        _panGestureStartPoint = [pgr locationInView:_viewContainerMain];
-    } else if (pgr.state == UIGestureRecognizerStateChanged) {
-        
-        if ((CGRectGetWidth(_viewContainerMain.frame) / 2.0f) > _panGestureStartPoint.x) {
-            if (_leftViewController != nil) {
-                [_viewContainerLeft setHidden:NO];
-                
-                CGPoint center = _viewContainerLeft.center;
-                CGPoint translation = [pgr translationInView:_viewContainerLeft];
-                center = CGPointMake(center.x + translation.x,
-                                     center.y);
-                
-                BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(_viewContainerLeft.frame);
-                if (isAtMax == YES) {
-                    NSLog(@"Is at max");
-                    center.x = CGRectGetWidth(self.view.frame) / 2.0f;
-                }
-                BOOL isAtMin = (center.x + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
-                if (isAtMin == YES) {
-                    center.x = (CGRectGetWidth(self.view.frame) - _leftSidebarWidth) - (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
-                }
-                _viewContainerLeft.center = center;
-                
-                // Translations main
-                if (_slideMainViewWithLeftSidebar == YES) {
-                    CGPoint center2 = pgr.view.center;
-                    CGPoint translation2 = [pgr translationInView:pgr.view.superview];
-                    center2 = CGPointMake(center2.x + translation2.x,
-                                         center2.y);
-                    if (isAtMax == YES) {
-                        center2.x = _leftSidebarWidth + (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
-                    }
-                    if (isAtMin == YES) {
-                        center2.x = CGRectGetWidth(self.view.frame) / 2.0f;
-                    }
-                    pgr.view.center = center2;
-                }
-                
-                [pgr setTranslation:CGPointZero inView:_viewContainerLeft];
-            }
-        } else {
-            if (_rightViewController != nil) {
-                [_viewContainerRight setHidden:NO];
-                
-                CGPoint center = _viewContainerRight.center;
-                CGPoint translation = [pgr translationInView:_viewContainerRight];
-                center = CGPointMake(center.x + translation.x,
-                                     center.y);
-                BOOL isAtMax = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < 0;
-                if (isAtMax == YES) {
-                    center.x = CGRectGetWidth(self.view.frame) / 2.0f;
-                }
-                BOOL isAtMin = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) > _rightSidebarWidth;
-                if (isAtMin == YES) {
-                    center.x = (CGRectGetWidth(_viewContainerRight.frame) / 2.0f) + _rightSidebarWidth;
-                }
-                _viewContainerRight.center = center;
-                
-                // Translations main
-                if (_slideMainViewWithRightSidebar == YES) {
-                    CGPoint center2 = pgr.view.center;
-                    CGPoint translation2 = [pgr translationInView:pgr.view.superview];
-                    center2 = CGPointMake(center2.x + translation2.x,
-                                         center2.y);
-                    if (isAtMax == YES) {
-                        center2.x = (CGRectGetWidth(self.view.frame)- _rightSidebarWidth) - (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
-                    }
-                    if (isAtMin == YES) {
-                        center2.x = CGRectGetWidth(self.view.frame) / 2.0f;
-                    }
-                    pgr.view.center = center2;
-                }
-                
-                [pgr setTranslation:CGPointZero inView:_viewContainerRight];
-            }
-        }
-        
-    } else if (pgr.state == UIGestureRecognizerStateEnded) {
-        if ((CGRectGetWidth(self.view.frame) / 2.0f) > _panGestureStartPoint.x) {
-            [self showLeftSidebar:[self isLeftMoreOpenThanClosed]];
-        } else {
-            [self showRightSidebar:[self isRightMoreOpenThanClosed]];
-        }
-    }
+//    if (pgr.state == UIGestureRecognizerStateBegan) {
+//        [self attachLeftSidebar];
+//        [self attachRightSidebar];
+//        
+//        _panGestureStartPoint = [pgr locationInView:_viewContainerMain];
+//    } else if (pgr.state == UIGestureRecognizerStateChanged) {
+//        
+//        if ((CGRectGetWidth(_viewContainerMain.frame) / 2.0f) > _panGestureStartPoint.x) {
+//            if (_leftViewController != nil) {
+//                [_viewContainerLeft setHidden:NO];
+//                
+//                CGPoint center = _viewContainerLeft.center;
+//                CGPoint translation = [pgr translationInView:_viewContainerLeft];
+//                center = CGPointMake(center.x + translation.x,
+//                                     center.y);
+//                
+//                BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(_viewContainerLeft.frame);
+//                if (isAtMax == YES) {
+//                    NSLog(@"Is at max");
+//                    center.x = CGRectGetWidth(self.view.frame) / 2.0f;
+//                }
+//                BOOL isAtMin = (center.x + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
+//                if (isAtMin == YES) {
+//                    center.x = (CGRectGetWidth(self.view.frame) - _leftSidebarWidth) - (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
+//                }
+//                _viewContainerLeft.center = center;
+//                
+//                // Translations main
+//                if (_slideMainViewWithLeftSidebar == YES) {
+//                    CGPoint center2 = pgr.view.center;
+//                    CGPoint translation2 = [pgr translationInView:pgr.view.superview];
+//                    center2 = CGPointMake(center2.x + translation2.x,
+//                                         center2.y);
+//                    if (isAtMax == YES) {
+//                        center2.x = _leftSidebarWidth + (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
+//                    }
+//                    if (isAtMin == YES) {
+//                        center2.x = CGRectGetWidth(self.view.frame) / 2.0f;
+//                    }
+//                    pgr.view.center = center2;
+//                }
+//                
+//                [pgr setTranslation:CGPointZero inView:_viewContainerLeft];
+//            }
+//        } else {
+//            if (_rightViewController != nil) {
+//                [_viewContainerRight setHidden:NO];
+//                
+//                CGPoint center = _viewContainerRight.center;
+//                CGPoint translation = [pgr translationInView:_viewContainerRight];
+//                center = CGPointMake(center.x + translation.x,
+//                                     center.y);
+//                BOOL isAtMax = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < 0;
+//                if (isAtMax == YES) {
+//                    center.x = CGRectGetWidth(self.view.frame) / 2.0f;
+//                }
+//                BOOL isAtMin = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) > _rightSidebarWidth;
+//                if (isAtMin == YES) {
+//                    center.x = (CGRectGetWidth(_viewContainerRight.frame) / 2.0f) + _rightSidebarWidth;
+//                }
+//                _viewContainerRight.center = center;
+//                
+//                // Translations main
+//                if (_slideMainViewWithRightSidebar == YES) {
+//                    CGPoint center2 = pgr.view.center;
+//                    CGPoint translation2 = [pgr translationInView:pgr.view.superview];
+//                    center2 = CGPointMake(center2.x + translation2.x,
+//                                         center2.y);
+//                    if (isAtMax == YES) {
+//                        center2.x = (CGRectGetWidth(self.view.frame)- _rightSidebarWidth) - (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
+//                    }
+//                    if (isAtMin == YES) {
+//                        center2.x = CGRectGetWidth(self.view.frame) / 2.0f;
+//                    }
+//                    pgr.view.center = center2;
+//                }
+//                
+//                [pgr setTranslation:CGPointZero inView:_viewContainerRight];
+//            }
+//        }
+//        
+//    } else if (pgr.state == UIGestureRecognizerStateEnded) {
+//        if ((CGRectGetWidth(self.view.frame) / 2.0f) > _panGestureStartPoint.x) {
+//            [self showLeftSidebar:[self isLeftMoreOpenThanClosed]];
+//        } else {
+//            [self showRightSidebar:[self isRightMoreOpenThanClosed]];
+//        }
+//    }
 }
 
 @end

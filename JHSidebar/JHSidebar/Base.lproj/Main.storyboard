@@ -15,7 +15,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="8dx-Gf-Qmz" kind="custom" identifier="JHSidebarMain" id="gCb-b8-20l"/>
+                        <segue destination="ldr-F8-axn" kind="custom" identifier="JHSidebarMain" id="gCb-b8-20l"/>
                         <segue destination="6vV-l9-AAT" kind="custom" identifier="JHSidebarLeft" id="i5s-h1-Nhy"/>
                         <segue destination="Oi0-Lt-cBq" kind="custom" identifier="JHSidebarRight" id="fuw-pS-oV8"/>
                     </connections>
@@ -34,38 +34,19 @@
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="THE MAIN VIEW" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7d1-gd-LAU">
                                 <rect key="frame" x="97" y="110" width="127" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pUJ-0W-aqp">
-                                <rect key="frame" x="47" y="167" width="68" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Open Left">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onClickOpenLeft:" destination="8dx-Gf-Qmz" eventType="touchUpInside" id="lLQ-qE-fJA"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="D7y-HB-l0Q">
-                                <rect key="frame" x="196" y="167" width="78" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Open Right">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onClickOpenRight:" destination="8dx-Gf-Qmz" eventType="touchUpInside" id="hmX-CC-SyQ"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="TrQ-ho-abr"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RA7-yW-qCJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="795" y="194"/>
+            <point key="canvasLocation" x="1321" y="194"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="dn6-60-V1c">
@@ -112,6 +93,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wxc-b6-jyi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="795" y="776"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="n7Y-4g-eHu">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ldr-F8-axn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="O58-LZ-Q4L">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8dx-Gf-Qmz" kind="relationship" relationship="rootViewController" id="uzL-qh-ERh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L2x-8b-ydW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="795" y="194"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

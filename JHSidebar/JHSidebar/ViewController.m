@@ -23,6 +23,10 @@
     [self.sidebarViewController enableTapGesture];
     [self.sidebarViewController enablePanGesture];
     [self.sidebarViewController setSlideMainViewWithLeftSidebar:YES];
+    
+    [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"399-list1"] style:UIBarButtonItemStylePlain target:self action:@selector(onClickLeft:)]];
+    
+    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"399-list1"] style:UIBarButtonItemStylePlain target:self action:@selector(onClickRight:)]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -31,12 +35,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)onClickOpenLeft:(id)sender {
+- (void)onClickLeft:(id)sender {
     [self.sidebarViewController toggleLeftSidebar];
-//    [self.sidebarViewController showLeftSidebar:YES];
 }
 
-- (IBAction)onClickOpenRight:(id)sender {
+- (void)onClickRight:(id)sender {
     [self.sidebarViewController showRightSidebar:YES];
 }
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03AEA6EF1873582900913CCD /* 399-list1.png in Resources */ = {isa = PBXBuildFile; fileRef = 03AEA6ED1873582900913CCD /* 399-list1.png */; };
+		03AEA6F01873582900913CCD /* 399-list1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03AEA6EE1873582900913CCD /* 399-list1@2x.png */; };
 		03F2D9651872363500C69576 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F2D9641872363500C69576 /* Foundation.framework */; };
 		03F2D9671872363500C69576 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F2D9661872363500C69576 /* CoreGraphics.framework */; };
 		03F2D9691872363500C69576 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F2D9681872363500C69576 /* UIKit.framework */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		03AEA6ED1873582900913CCD /* 399-list1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "399-list1.png"; sourceTree = "<group>"; };
+		03AEA6EE1873582900913CCD /* 399-list1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "399-list1@2x.png"; sourceTree = "<group>"; };
 		03F2D9611872363500C69576 /* JHSidebar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JHSidebar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03F2D9641872363500C69576 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		03F2D9661872363500C69576 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -124,6 +128,8 @@
 				03F2D9761872363500C69576 /* Main.storyboard */,
 				03F2D9791872363500C69576 /* ViewController.h */,
 				03F2D97A1872363500C69576 /* ViewController.m */,
+				03AEA6ED1873582900913CCD /* 399-list1.png */,
+				03AEA6EE1873582900913CCD /* 399-list1@2x.png */,
 				03F2D97C1872363500C69576 /* Images.xcassets */,
 				03F2D96B1872363500C69576 /* Supporting Files */,
 			);
@@ -247,8 +253,10 @@
 			files = (
 				03F2D97D1872363500C69576 /* Images.xcassets in Resources */,
 				03F2D99A1872364300C69576 /* JHSidebar.podspec in Resources */,
+				03AEA6F01873582900913CCD /* 399-list1@2x.png in Resources */,
 				03F2D96F1872363500C69576 /* InfoPlist.strings in Resources */,
 				03F2D9781872363500C69576 /* Main.storyboard in Resources */,
+				03AEA6EF1873582900913CCD /* 399-list1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
