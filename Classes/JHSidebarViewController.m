@@ -60,6 +60,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 - (void)setup {
     _operationQueue = [NSMutableArray array];
     
+    _slideMainViewWithLeftSidebar = NO;
+    _slideMainViewWithRightSidebar = NO;
+    
     _leftOpenAnimationLength = 0.35;
     _leftCloseAnimationLength = 0.35f;
     _rightOpenAnimationLength = 0.35f;
@@ -177,8 +180,14 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         CGRect frame = _viewContainerLeft.frame;
         frame.origin.x = 0;
         
+        CGRect mainFrame = _viewContainerMain.frame;
+        if (_slideMainViewWithLeftSidebar == YES) {
+            mainFrame.origin.x = _leftSidebarWidth;
+        }
+        
         [UIView animateWithDuration:_leftOpenAnimationLength animations:^{
             [_viewContainerLeft setFrame:frame];
+            [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
             
         }];
@@ -187,8 +196,14 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         CGRect frame = _viewContainerLeft.frame;
         frame.origin.x = -CGRectGetWidth(_viewContainerLeft.frame);
         
+        CGRect mainFrame = _viewContainerMain.frame;
+        if (_slideMainViewWithLeftSidebar == YES) {
+            mainFrame.origin.x = 0.0f;;
+        }
+        
         [UIView animateWithDuration:_leftCloseAnimationLength animations:^{
             [_viewContainerLeft setFrame:frame];
+            [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
             
         }];
@@ -205,8 +220,14 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         CGRect frame = _viewContainerRight.frame;
         frame.origin.x = 0;
         
+        CGRect mainFrame = _viewContainerMain.frame;
+        if (_slideMainViewWithRightSidebar == YES) {
+            mainFrame.origin.x = -_rightSidebarWidth;
+        }
+        
         [UIView animateWithDuration:_rightOpenAnimationLength animations:^{
             [_viewContainerRight setFrame:frame];
+            [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
             
         }];
@@ -215,8 +236,14 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         CGRect frame = _viewContainerRight.frame;
         frame.origin.x = CGRectGetWidth(self.view.frame);
         
+        CGRect mainFrame = _viewContainerMain.frame;
+        if (_slideMainViewWithRightSidebar == YES) {
+            mainFrame.origin.x = 0.0f;
+        }
+        
         [UIView animateWithDuration:_rightCloseAnimationLength animations:^{
             [_viewContainerRight setFrame:frame];
+            [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
             
         }];

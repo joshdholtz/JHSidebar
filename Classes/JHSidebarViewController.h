@@ -14,6 +14,8 @@
 @property (nonatomic, strong) UIViewController *leftViewController;
 @property (nonatomic, strong) UIViewController *rightViewController;
 
+@property (nonatomic, assign) BOOL slideMainViewWithLeftSidebar;
+@property (nonatomic, assign) BOOL slideMainViewWithRightSidebar;
 @property (nonatomic, assign) CGFloat leftOpenAnimationLength;
 @property (nonatomic, assign) CGFloat leftCloseAnimationLength;
 @property (nonatomic, assign) CGFloat rightOpenAnimationLength;

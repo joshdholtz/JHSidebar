@@ -22,6 +22,8 @@
 
     NSLog(@"SidebarViewController - %@", self.sidebarViewController);
     [self.sidebarViewController enableTapGesture];
+    [self.sidebarViewController setSlideMainViewWithLeftSidebar:YES];
+    [self.sidebarViewController setSlideMainViewWithRightSidebar:YES];
 }
 
 - (void)didReceiveMemoryWarning
