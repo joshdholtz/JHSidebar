@@ -89,11 +89,15 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     // Creating left container view (same size as self.view)
     if (_viewContainerLeft == nil) {
         _viewContainerLeft = [[UIView alloc] initWithFrame:CGRectMake(-CGRectGetWidth(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+        [_viewContainerLeft setBackgroundColor:[UIColor orangeColor]];
+        [_viewContainerLeft setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleWidth];
     }
     
     // Creating right container view (same size as self.view)
     if (_viewContainerRight == nil) {
         _viewContainerRight = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+        [_viewContainerRight setBackgroundColor:[UIColor redColor]];
+        [_viewContainerRight setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     }
     
     for (OperationBlock block in _operationQueue) {
@@ -282,7 +286,11 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     if (show == YES) {
         
         CGRect frame = _viewContainerRight.frame;
-        frame.origin.x = 0;
+        NSLog(@"X to animate from - %f", CGRectGetWidth(_viewContainerMain.frame));
+        frame.origin.x = CGRectGetWidth(_viewContainerMain.frame);
+        [_viewContainerRight setFrame:frame];
+        
+        frame.origin.x = CGRectGetWidth(_viewContainerMain.frame) - CGRectGetWidth(_viewContainerRight.frame);
         
         CGRect mainFrame = _viewContainerMain.frame;
         if (_slideMainViewWithRightSidebar == YES) {
@@ -299,7 +307,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     } else {
 
         CGRect frame = _viewContainerRight.frame;
-        frame.origin.x = _rightSidebarWidth;
+        frame.origin.x = CGRectGetWidth(_viewContainerMain.frame) - (CGRectGetWidth(_viewContainerRight.frame) - _rightSidebarWidth);
         
         CGRect mainFrame = _viewContainerMain.frame;
         if (_slideMainViewWithRightSidebar == YES) {
@@ -324,6 +332,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     [self addChildViewController:self.mainViewController];
     
     _viewContainerMain = [[UIView alloc] initWithFrame:self.view.frame];
+    [_viewContainerMain setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [_viewContainerMain setBackgroundColor:[UIColor yellowColor]];
     [self.view insertSubview:_viewContainerMain atIndex:0];
     
@@ -332,6 +341,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     // Adjust child view controller view to height of self.view
     CGRect frame = _mainViewController.view.frame;
     frame.size.height = CGRectGetHeight(_viewContainerMain.frame);
+    [_mainViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [_mainViewController.view setFrame:frame];
 }
 
@@ -362,7 +372,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 #pragma mark - Private
 
 - (BOOL)isLeftMoreOpenThanClosed {
-    NSInteger turningPoint = (CGRectGetWidth(self.view.frame) - (_leftSidebarWidth / 2.0f));
+    NSInteger turningPoint = (_leftSidebarWidth / 2.0f);
     return (turningPoint < CGRectGetMaxX(_viewContainerLeft.frame));
 }
 
@@ -380,6 +390,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Places an inner container (to the set width in the settings) inside the container view
         _viewContainerInnerLeft = [[UIView alloc] initWithFrame:_viewContainerLeft.frame];
+        [_viewContainerLeft setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
         [_viewContainerLeft addSubview:_viewContainerInnerLeft];
         
         CGRect frame = _viewContainerInnerLeft.frame;
@@ -402,6 +413,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Places an inner container (to the set width in the settings) inside the container view
         _viewContainerInnerRight = [[UIView alloc] initWithFrame:_viewContainerRight.frame];
+        [_viewContainerRight setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
         [_viewContainerRight addSubview:_viewContainerInnerRight];
         
         CGRect frame = _viewContainerInnerRight.frame;
@@ -516,7 +528,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         _panGestureStartPoint = [pgr locationInView:_viewContainerMain];
     } else if (pgr.state == UIGestureRecognizerStateChanged) {
         
-        if ((CGRectGetWidth(self.view.frame) / 2.0f) > _panGestureStartPoint.x) {
+        if ((CGRectGetWidth(_viewContainerMain.frame) / 2.0f) > _panGestureStartPoint.x) {
             if (_leftViewController != nil) {
                 [_viewContainerLeft setHidden:NO];
                 
@@ -525,8 +537,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                 center = CGPointMake(center.x + translation.x,
                                      center.y);
                 
-                BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(self.view.frame);
+                BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(_viewContainerLeft.frame);
                 if (isAtMax == YES) {
+                    NSLog(@"Is at max");
                     center.x = CGRectGetWidth(self.view.frame) / 2.0f;
                 }
                 BOOL isAtMin = (center.x + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
@@ -542,7 +555,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                     center2 = CGPointMake(center2.x + translation2.x,
                                          center2.y);
                     if (isAtMax == YES) {
-                        center2.x = _leftSidebarWidth + CGRectGetWidth(self.view.frame) / 2.0f;
+                        center2.x = _leftSidebarWidth + (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
                     }
                     if (isAtMin == YES) {
                         center2.x = CGRectGetWidth(self.view.frame) / 2.0f;
