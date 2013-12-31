@@ -502,40 +502,59 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             if (_leftViewController != nil) {
                 [_viewContainerLeft setHidden:NO];
                 
-                // Translations main
-                if (_slideMainViewWithLeftSidebar == YES) {
-                    CGPoint center = pgr.view.center;
-                    CGPoint translation = [pgr translationInView:pgr.view.superview];
-                    center = CGPointMake(center.x + translation.x,
-                                         center.y);
-                    pgr.view.center = center;
-                }
-                
                 CGPoint center = _viewContainerLeft.center;
                 CGPoint translation = [pgr translationInView:_viewContainerLeft];
                 center = CGPointMake(center.x + translation.x,
                                      center.y);
+                
+                BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(self.view.frame);
+                if (isAtMax == YES) {
+                    NSLog(@"IS AT MAX");
+                    center.x = CGRectGetWidth(self.view.frame) / 2.0f;
+                }
                 _viewContainerLeft.center = center;
+                
+                // Translations main
+                if (_slideMainViewWithLeftSidebar == YES) {
+                    CGPoint center2 = pgr.view.center;
+                    CGPoint translation2 = [pgr translationInView:pgr.view.superview];
+                    center2 = CGPointMake(center2.x + translation2.x,
+                                         center2.y);
+                    if (isAtMax == YES) {
+                        center2.x = _leftSidebarWidth + CGRectGetWidth(self.view.frame) / 2.0f;
+                    }
+                    pgr.view.center = center2;
+                }
+                
                 [pgr setTranslation:CGPointZero inView:_viewContainerLeft];
             }
         } else {
             if (_rightViewController != nil) {
                 [_viewContainerRight setHidden:NO];
                 
-                // Translations main
-                if (_slideMainViewWithRightSidebar == YES) {
-                    CGPoint center = pgr.view.center;
-                    CGPoint translation = [pgr translationInView:pgr.view.superview];
-                    center = CGPointMake(center.x + translation.x,
-                                         center.y);
-                    pgr.view.center = center;
-                }
-                
                 CGPoint center = _viewContainerRight.center;
                 CGPoint translation = [pgr translationInView:_viewContainerRight];
                 center = CGPointMake(center.x + translation.x,
                                      center.y);
+                BOOL isAtMax = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < 0;
+                if (isAtMax == YES) {
+                    NSLog(@"IS AT MAX");
+                    center.x = CGRectGetWidth(self.view.frame) / 2.0f;
+                }
                 _viewContainerRight.center = center;
+                
+                // Translations main
+                if (_slideMainViewWithRightSidebar == YES) {
+                    CGPoint center2 = pgr.view.center;
+                    CGPoint translation2 = [pgr translationInView:pgr.view.superview];
+                    center2 = CGPointMake(center2.x + translation2.x,
+                                         center2.y);
+                    if (isAtMax == YES) {
+                        center2.x = (CGRectGetWidth(self.view.frame)- _rightSidebarWidth) - (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
+                    }
+                    pgr.view.center = center2;
+                }
+                
                 [pgr setTranslation:CGPointZero inView:_viewContainerRight];
             }
         }
