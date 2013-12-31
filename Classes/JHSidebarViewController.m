@@ -24,6 +24,9 @@
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureLeftSidebar;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRightSidebar;
 
+@property (nonatomic, strong) UIPanGestureRecognizer *panGestureLeftSidebar;
+@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRightSidebar;
+
 @property (nonatomic, strong) NSMutableArray *operationQueue;
 
 @end
@@ -170,6 +173,43 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     }
 }
 
+- (void)enablePanGesture {
+ 
+    // Adidng pan gesture to close left sidebar
+    if (_panGestureLeftSidebar == nil) {
+        
+        [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
+            sidebarViewController.panGestureLeftSidebar = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanLeftSidebar:)];
+            [sidebarViewController.viewContainerLeft addGestureRecognizer:sidebarViewController.panGestureLeftSidebar];
+        }];
+    }
+    
+    // Adidng pan gesture to close right sidebar
+    if (_panGestureRightSidebar == nil) {
+        
+        [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
+            sidebarViewController.panGestureRightSidebar = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanRightSidebar:)];
+            [sidebarViewController.viewContainerRight addGestureRecognizer:sidebarViewController.panGestureRightSidebar];
+        }];
+    }
+    
+    if (_viewContainerLeft != nil && _viewContainerRight != nil) {
+        for (OperationBlock block in _operationQueue) {
+            block(self);
+        }
+        [_operationQueue removeAllObjects];
+    }
+    
+}
+
+- (void)toggleLeftSidebar {
+    [self showLeftSidebar:![self isLeftMoreOpenThanClosed]];
+}
+
+- (void)toggleRightSidebar {
+    
+}
+
 - (void)showLeftSidebar:(BOOL)show {
     // Initializes left sidebar view if not already attached
     [self attachLeftSidebar];
@@ -280,6 +320,16 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 #pragma mark - Private
 
+- (BOOL)isLeftMoreOpenThanClosed {
+    NSInteger turningPoint = (CGRectGetWidth(self.view.frame) - (_leftSidebarWidth / 2.0f));
+    return (turningPoint < CGRectGetMaxX(_viewContainerLeft.frame));
+}
+
+- (BOOL)isRightMoreOpenThanClosed {
+    NSInteger turningPoint = (_rightSidebarWidth / 2.0f);
+    return (turningPoint > CGRectGetMinX(_viewContainerRight.frame));
+}
+
 - (void)attachLeftSidebar {
     if (_viewContainerInnerLeft == nil) {
         
@@ -324,6 +374,46 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 - (void)onTapCloseRightSidebar:(id)sender {
     [self showRightSidebar:NO];
+}
+
+- (void)onPanLeftSidebar:(UIPanGestureRecognizer*)pgr {
+    if (pgr.state == UIGestureRecognizerStateBegan) {
+
+    } else if (pgr.state == UIGestureRecognizerStateChanged) {
+        CGPoint center = pgr.view.center;
+        CGPoint translation = [pgr translationInView:pgr.view.superview];
+        center = CGPointMake(center.x + translation.x,
+                             center.y);
+        pgr.view.center = center;
+        [pgr setTranslation:CGPointZero inView:pgr.view.superview];
+        
+        CGPoint topLeft = pgr.view.frame.origin;
+        topLeft = CGPointMake(topLeft.x + translation.x,
+                              topLeft.y);
+
+    } else if (pgr.state == UIGestureRecognizerStateEnded) {
+        [self showLeftSidebar:[self isLeftMoreOpenThanClosed]];
+    }
+}
+
+- (void)onPanRightSidebar:(UIPanGestureRecognizer*)pgr {
+    if (pgr.state == UIGestureRecognizerStateBegan) {
+        
+    } else if (pgr.state == UIGestureRecognizerStateChanged) {
+        CGPoint center = pgr.view.center;
+        CGPoint translation = [pgr translationInView:pgr.view.superview];
+        center = CGPointMake(center.x + translation.x,
+                             center.y);
+        pgr.view.center = center;
+        [pgr setTranslation:CGPointZero inView:pgr.view.superview];
+        
+        CGPoint topLeft = pgr.view.frame.origin;
+        topLeft = CGPointMake(topLeft.x + translation.x,
+                              topLeft.y);
+        
+    } else if (pgr.state == UIGestureRecognizerStateEnded) {
+        [self showRightSidebar:[self isRightMoreOpenThanClosed]];
+    }
 }
 
 @end

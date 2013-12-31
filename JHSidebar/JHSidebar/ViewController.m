@@ -21,6 +21,7 @@
     [super viewDidLoad];
 
     [self.sidebarViewController enableTapGesture];
+    [self.sidebarViewController enablePanGesture];
 }
 
 - (void)didReceiveMemoryWarning
@@ -30,7 +31,8 @@
 }
 
 - (IBAction)onClickOpenLeft:(id)sender {
-    [self.sidebarViewController showLeftSidebar:YES];
+    [self.sidebarViewController toggleLeftSidebar];
+//    [self.sidebarViewController showLeftSidebar:YES];
 }
 
 - (IBAction)onClickOpenRight:(id)sender {

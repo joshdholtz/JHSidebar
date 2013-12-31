@@ -24,6 +24,10 @@
 @property (nonatomic, assign) NSInteger rightSidebarWidth;
 
 - (void)enableTapGesture;
+- (void)enablePanGesture;
+
+- (void)toggleLeftSidebar;
+- (void)toggleRightSidebar;
 
 - (void)showLeftSidebar:(BOOL)show;
 - (void)showRightSidebar:(BOOL)show;
