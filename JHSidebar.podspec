@@ -5,11 +5,11 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
                     Just another sidebar implementation.
                    DESC
-  s.homepage     = "https://github.com/joshdholtz/jhsidebar-ios"
+  s.homepage     = "https://github.com/joshdholtz/JHSidebar"
   # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license      = 'MIT'
   s.author       = { "Josh Holtz" => "me@joshholtz" }
-  s.source       = { :git => "https://github.com/joshdholtz/jhsidebar-ios.git", :tag => s.version.to_s }
+  s.source       = { :git => "https://github.com/joshdholtz/JHSidebar.git", :tag => s.version.to_s }
 
   s.platform     = :ios, '7.0'
   s.ios.deployment_target = '6.0'
