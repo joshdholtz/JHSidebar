@@ -512,6 +512,10 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                     NSLog(@"IS AT MAX");
                     center.x = CGRectGetWidth(self.view.frame) / 2.0f;
                 }
+                BOOL isAtMin = (center.x + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
+                if (isAtMin == YES) {
+                    center.x = (CGRectGetWidth(self.view.frame) - _leftSidebarWidth) - (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
+                }
                 _viewContainerLeft.center = center;
                 
                 // Translations main
@@ -522,6 +526,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                                          center2.y);
                     if (isAtMax == YES) {
                         center2.x = _leftSidebarWidth + CGRectGetWidth(self.view.frame) / 2.0f;
+                    }
+                    if (isAtMin == YES) {
+                        center2.x = CGRectGetWidth(self.view.frame) / 2.0f;
                     }
                     pgr.view.center = center2;
                 }
@@ -541,6 +548,10 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                     NSLog(@"IS AT MAX");
                     center.x = CGRectGetWidth(self.view.frame) / 2.0f;
                 }
+                BOOL isAtMin = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) > _rightSidebarWidth;
+                if (isAtMin == YES) {
+                    center.x = (CGRectGetWidth(_viewContainerRight.frame) / 2.0f) + _rightSidebarWidth;
+                }
                 _viewContainerRight.center = center;
                 
                 // Translations main
@@ -551,6 +562,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                                          center2.y);
                     if (isAtMax == YES) {
                         center2.x = (CGRectGetWidth(self.view.frame)- _rightSidebarWidth) - (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
+                    }
+                    if (isAtMin == YES) {
+                        center2.x = CGRectGetWidth(self.view.frame) / 2.0f;
                     }
                     pgr.view.center = center2;
                 }
