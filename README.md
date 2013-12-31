@@ -1,6 +1,6 @@
 # JHSidebar
 
-Probably just another sidebar library but this is the way I wanted them done.
+Probably just another sidebar library but this is the way I wanted them implemented.
 
 ## Features
 
@@ -8,6 +8,7 @@ Probably just another sidebar library but this is the way I wanted them done.
 - Configure sidebars to slide over the main view or slide with the main view
 - Configure the width of the sidebars
 - Configure sidebar open and close animation time
+- Access the JHSidebarViewController from any UIViewController by importing `#import <JHSidebar/JHSidebarViewController.h>`
 
 ## Installation
 
@@ -23,9 +24,47 @@ it simply add the following line to your Podfile:
 
 ## Examples
 
-### Storyboard Segues
+### Open/Close/Toggle
 
-### Good Old Fashion Code
+````objc
+
+- (void)onClickLeft:(id)sender {
+    // Open left sidebar
+    [self.sidebarViewController showLeftSidebar:YES];
+
+    // Close left sidebar
+    [self.sidebarViewController showLeftSidebar:NO];
+
+    // Toggle left sidebar
+    [self.sidebarViewController toggleLeftSidebar];
+}
+
+- (void)onClickRight:(id)sender {
+    // Open right sidebar
+    [self.sidebarViewController showRightSidebar:YES];
+
+    // Close right sidebar
+    [self.sidebarViewController showRightSidebar:NO];
+
+    // Toggle right sidebar
+    [self.sidebarViewController toggleRightSidebar];
+}
+
+````
+
+### Setup - Storyboard Segues
+
+The main view, left sidebar, and right sidebar can be set up with ONLY segues if that is the route you want to choose.
+All you need to do is define the following custom segue identifiers
+- JHSidebarMain (required)
+- JHSidebarLeft (optional)
+- JHSidebarRight (optional)
+
+![](https://raw.github.com/joshdholtz/JHSidebar/master/Doc/example_segue.png)
+
+### Setup - Good Old Fashion Code
+
+If storyboards are not the route you want to take, you can initialize the JHSidebarViewController directly in your code by setting setting the main view controller and both, one, or none of the left and right sidebar view controllers.
 
 AppDelegate.h
 ````objc
@@ -91,7 +130,7 @@ AppDelegate.m
 
 ## Author
 
-Josh Holtz, josh@rokkincat.com
+Josh Holtz, josh@rokkincat.com, [@joshdholtz](https://twitter.com/joshdholtz)
 
 ## License
 
