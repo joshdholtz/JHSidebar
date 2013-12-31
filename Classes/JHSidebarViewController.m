@@ -435,8 +435,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         center = CGPointMake(center.x + translation.x,
                              center.y);
         
-        NSLog(@"Center - %f", center.x);
-        NSLog(@"Right edge - %f", center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f));
         BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
         if (isAtMax == YES) {
             center.x = (CGRectGetWidth(self.view.frame) - _leftSidebarWidth) - (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
@@ -479,8 +477,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         center = CGPointMake(center.x + translation.x,
                              center.y);
         
-        NSLog(@"Center - %f", center.x);
-        NSLog(@"Left edge - %f", center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f));
         BOOL isAtMax = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) > _rightSidebarWidth;
         if (isAtMax == YES) {
             center.x = _rightSidebarWidth + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f);
@@ -531,7 +527,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                 
                 BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(self.view.frame);
                 if (isAtMax == YES) {
-                    NSLog(@"IS AT MAX");
                     center.x = CGRectGetWidth(self.view.frame) / 2.0f;
                 }
                 BOOL isAtMin = (center.x + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
@@ -567,7 +562,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                                      center.y);
                 BOOL isAtMax = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < 0;
                 if (isAtMax == YES) {
-                    NSLog(@"IS AT MAX");
                     center.x = CGRectGetWidth(self.view.frame) / 2.0f;
                 }
                 BOOL isAtMin = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) > _rightSidebarWidth;

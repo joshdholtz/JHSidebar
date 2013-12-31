@@ -15,9 +15,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="8dx-Gf-Qmz" kind="custom" identifier="JHSidebarMain" customClass="JHSidebarStoryboardSegue" id="gCb-b8-20l"/>
-                        <segue destination="6vV-l9-AAT" kind="custom" identifier="JHSidebarLeft" customClass="JHSidebarStoryboardSegue" id="i5s-h1-Nhy"/>
-                        <segue destination="Oi0-Lt-cBq" kind="custom" identifier="JHSidebarRight" customClass="JHSidebarStoryboardSegue" id="fuw-pS-oV8"/>
+                        <segue destination="8dx-Gf-Qmz" kind="custom" identifier="JHSidebarMain" id="gCb-b8-20l"/>
+                        <segue destination="6vV-l9-AAT" kind="custom" identifier="JHSidebarLeft" id="i5s-h1-Nhy"/>
+                        <segue destination="Oi0-Lt-cBq" kind="custom" identifier="JHSidebarRight" id="fuw-pS-oV8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

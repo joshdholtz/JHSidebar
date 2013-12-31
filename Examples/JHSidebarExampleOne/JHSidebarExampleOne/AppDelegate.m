@@ -26,7 +26,6 @@
     [self.sidebarViewController enableTapGesture]; // Enables tap on open sidebar to close
     [self.sidebarViewController enablePanGesture]; // Enables panning to open and close sidebars
     [self.sidebarViewController setSlideMainViewWithLeftSidebar:YES]; // Main view will slide with side bar instead of left side bar overlapping main view
-    [self.sidebarViewController setSlideMainViewWithRightSidebar:YES];
     [self.sidebarViewController setRightSidebarWidth:220.0f]; // Sets width of right sidebar
     
     // Sets "main" view
