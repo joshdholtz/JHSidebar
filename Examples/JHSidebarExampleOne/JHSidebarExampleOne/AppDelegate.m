@@ -30,7 +30,9 @@
     [self.sidebarViewController setRightSidebarWidth:220.0f]; // Sets width of right sidebar
     
     // Sets "main" view
-    self.sidebarViewController.mainViewController = [[ViewController alloc] initWithNibName:@"ViewController" bundle:[NSBundle mainBundle]];
+    ViewController *viewController = [[ViewController alloc] initWithNibName:@"ViewController" bundle:[NSBundle mainBundle]];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    self.sidebarViewController.mainViewController = navController;
     
     // Sets "left sidebar"
     self.sidebarViewController.leftViewController = [[LeftViewController alloc] initWithNibName:@"LeftViewController" bundle:[NSBundle mainBundle]];

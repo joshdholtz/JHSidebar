@@ -420,19 +420,32 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     if (pgr.state == UIGestureRecognizerStateBegan) {
 
     } else if (pgr.state == UIGestureRecognizerStateChanged) {
-        if (_slideMainViewWithLeftSidebar == YES) {
-            CGPoint center = _viewContainerMain.center;
-            CGPoint translation = [pgr translationInView:_viewContainerMain.superview];
-            center = CGPointMake(center.x + translation.x,
-                                 center.y);
-            _viewContainerMain.center = center;
-        }
         
         CGPoint center = pgr.view.center;
         CGPoint translation = [pgr translationInView:pgr.view.superview];
         center = CGPointMake(center.x + translation.x,
                              center.y);
+        
+        NSLog(@"Center - %f", center.x);
+        NSLog(@"Right edge - %f", center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f));
+        BOOL isAtMax = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) < (CGRectGetWidth(self.view.frame) - _leftSidebarWidth);
+        if (isAtMax == YES) {
+            center.x = (CGRectGetWidth(self.view.frame) - _leftSidebarWidth) - (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
+        }
         pgr.view.center = center;
+        
+        if (_slideMainViewWithLeftSidebar == YES) {
+            CGPoint center2 = _viewContainerMain.center;
+            CGPoint translation2 = [pgr translationInView:_viewContainerMain.superview];
+            center2 = CGPointMake(center2.x + translation2.x,
+                                 center2.y);
+            if (isAtMax == YES) {
+                center2.x = CGRectGetWidth(_viewContainerMain.frame) / 2.0f;
+            }
+            
+            _viewContainerMain.center = center2;
+        }
+        
         [pgr setTranslation:CGPointZero inView:pgr.view.superview];
 
     } else if (pgr.state == UIGestureRecognizerStateEnded) {
@@ -444,19 +457,32 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     if (pgr.state == UIGestureRecognizerStateBegan) {
         
     } else if (pgr.state == UIGestureRecognizerStateChanged) {
-        if (_slideMainViewWithRightSidebar == YES) {
-            CGPoint center = _viewContainerMain.center;
-            CGPoint translation = [pgr translationInView:_viewContainerMain.superview];
-            center = CGPointMake(center.x + translation.x,
-                                 center.y);
-            _viewContainerMain.center = center;
-        }
         
         CGPoint center = pgr.view.center;
         CGPoint translation = [pgr translationInView:pgr.view.superview];
         center = CGPointMake(center.x + translation.x,
                              center.y);
+        
+        NSLog(@"Center - %f", center.x);
+        NSLog(@"Left edge - %f", center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f));
+        BOOL isAtMax = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) > _rightSidebarWidth;
+        if (isAtMax == YES) {
+            center.x = _rightSidebarWidth + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f);
+        }
+        
         pgr.view.center = center;
+        
+        if (_slideMainViewWithRightSidebar == YES) {
+            CGPoint center2 = _viewContainerMain.center;
+            CGPoint translation2 = [pgr translationInView:_viewContainerMain.superview];
+            center2 = CGPointMake(center2.x + translation2.x,
+                                 center2.y);
+            if (isAtMax == YES) {
+                center2.x = CGRectGetWidth(_viewContainerMain.frame) / 2.0f;
+            }
+            _viewContainerMain.center = center2;
+        }
+        
         [pgr setTranslation:CGPointZero inView:pgr.view.superview];
         
     } else if (pgr.state == UIGestureRecognizerStateEnded) {

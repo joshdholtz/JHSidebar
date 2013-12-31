@@ -25,6 +25,8 @@
 		03AEA6E21872923A00913CCD /* LeftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03AEA6E01872923A00913CCD /* LeftViewController.xib */; };
 		03AEA6E61872924300913CCD /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03AEA6E41872924300913CCD /* RightViewController.m */; };
 		03AEA6E71872924300913CCD /* RightViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03AEA6E51872924300913CCD /* RightViewController.xib */; };
+		03AEA6EB1873035500913CCD /* 399-list1.png in Resources */ = {isa = PBXBuildFile; fileRef = 03AEA6E91873035500913CCD /* 399-list1.png */; };
+		03AEA6EC1873035500913CCD /* 399-list1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03AEA6EA1873035500913CCD /* 399-list1@2x.png */; };
 		B73D0AD3499E4E31AA651AED /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B02BFE8140404491A7E53C77 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +66,8 @@
 		03AEA6E31872924300913CCD /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
 		03AEA6E41872924300913CCD /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
 		03AEA6E51872924300913CCD /* RightViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightViewController.xib; sourceTree = "<group>"; };
+		03AEA6E91873035500913CCD /* 399-list1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "399-list1.png"; sourceTree = "<group>"; };
+		03AEA6EA1873035500913CCD /* 399-list1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "399-list1@2x.png"; sourceTree = "<group>"; };
 		A119FF9A7F9D4C76BA87A430 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B02BFE8140404491A7E53C77 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -139,6 +143,8 @@
 				03AEA6E31872924300913CCD /* RightViewController.h */,
 				03AEA6E41872924300913CCD /* RightViewController.m */,
 				03AEA6E51872924300913CCD /* RightViewController.xib */,
+				03AEA6E91873035500913CCD /* 399-list1.png */,
+				03AEA6EA1873035500913CCD /* 399-list1@2x.png */,
 				03AEA6BC18728F0F00913CCD /* Images.xcassets */,
 				03AEA6AB18728F0F00913CCD /* Supporting Files */,
 			);
@@ -253,6 +259,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				03AEA6BD18728F0F00913CCD /* Images.xcassets in Resources */,
+				03AEA6EC1873035500913CCD /* 399-list1@2x.png in Resources */,
+				03AEA6EB1873035500913CCD /* 399-list1.png in Resources */,
 				03AEA6E71872924300913CCD /* RightViewController.xib in Resources */,
 				03AEA6E21872923A00913CCD /* LeftViewController.xib in Resources */,
 				03AEA6DD18728FB400913CCD /* ViewController.xib in Resources */,

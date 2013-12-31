@@ -28,7 +28,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"399-list1"] style:UIBarButtonItemStylePlain target:self action:@selector(onClickLeft:)]];
+    
+    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"399-list1"] style:UIBarButtonItemStylePlain target:self action:@selector(onClickRight:)]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -37,11 +40,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)onClickLeft:(id)sender {
+- (void)onClickLeft:(id)sender {
     [self.sidebarViewController showLeftSidebar:YES];
 }
 
-- (IBAction)onClickRight:(id)sender {
+- (void)onClickRight:(id)sender {
     [self.sidebarViewController showRightSidebar:YES];
 }
 
