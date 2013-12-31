@@ -315,9 +315,15 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     [self addChildViewController:self.mainViewController];
     
     _viewContainerMain = [[UIView alloc] initWithFrame:self.view.frame];
+    [_viewContainerMain setBackgroundColor:[UIColor yellowColor]];
     [self.view insertSubview:_viewContainerMain atIndex:0];
     
     [_viewContainerMain addSubview:_mainViewController.view];
+
+    // Adjust child view controller view to height of self.view
+    CGRect frame = _mainViewController.view.frame;
+    frame.size.height = CGRectGetHeight(_viewContainerMain.frame);
+    [_mainViewController.view setFrame:frame];
 }
 
 - (void)setLeftViewController:(UIViewController *)leftViewController {
@@ -325,13 +331,23 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     
     _leftViewController = leftViewController;
     [self addChildViewController:self.leftViewController];
+    
+    // Adjust child view controller view to height of self.view
+    CGRect frame = _leftViewController.view.frame;
+    frame.size.height = CGRectGetHeight(_viewContainerMain.frame);
+    [_leftViewController.view setFrame:frame];
 }
 
 - (void)setRightViewController:(UIViewController *)rightViewController {
     if (_rightViewController != nil) return;
     
     _rightViewController = rightViewController;
-    [self addChildViewController:self.leftViewController];
+    [self addChildViewController:self.rightViewController];
+    
+    // Adjust child view controller view to height of self.view
+    CGRect frame = _rightViewController.view.frame;
+    frame.size.height = CGRectGetHeight(_viewContainerMain.frame);
+    [_rightViewController.view setFrame:frame];
 }
 
 #pragma mark - Private
