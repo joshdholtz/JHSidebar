@@ -12,7 +12,7 @@
 
 #import "JHSidebarViewController.h"
 
-@interface JHSidebarViewController ()
+@interface JHSidebarViewController ()<UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *viewContainerMain;
 @property (nonatomic, strong) UIView *viewContainerLeft;
@@ -143,6 +143,12 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return NO;
+}
+
 #pragma mark - Public
 
 - (void)enableTapGesture {
@@ -180,6 +186,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
             sidebarViewController.panGestureLeftSidebar = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanLeftSidebar:)];
+            [sidebarViewController.panGestureLeftSidebar setDelegate:sidebarViewController];
             [sidebarViewController.viewContainerLeft addGestureRecognizer:sidebarViewController.panGestureLeftSidebar];
         }];
     }
@@ -189,6 +196,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
             sidebarViewController.panGestureRightSidebar = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanRightSidebar:)];
+            [sidebarViewController.panGestureRightSidebar setDelegate:sidebarViewController];
             [sidebarViewController.viewContainerRight addGestureRecognizer:sidebarViewController.panGestureRightSidebar];
         }];
     }
@@ -199,6 +207,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
             [sidebarViewController.viewContainerMain setUserInteractionEnabled:YES];
             sidebarViewController.panGestureMain = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanMain:)];
+            [sidebarViewController.panGestureMain setDelegate:sidebarViewController];
             [sidebarViewController.viewContainerMain addGestureRecognizer:sidebarViewController.panGestureMain];
         }];
     }
@@ -432,6 +441,10 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         if (isAtMax == YES) {
             center.x = (CGRectGetWidth(self.view.frame) - _leftSidebarWidth) - (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
         }
+        BOOL isAtMin = (center.x + (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f)) > CGRectGetWidth(self.view.frame);
+        if (isAtMin == YES) {
+            center.x = (CGRectGetWidth(_viewContainerLeft.frame) / 2.0f);
+        }
         pgr.view.center = center;
         
         if (_slideMainViewWithLeftSidebar == YES) {
@@ -441,6 +454,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                                  center2.y);
             if (isAtMax == YES) {
                 center2.x = CGRectGetWidth(_viewContainerMain.frame) / 2.0f;
+            }
+            if (isAtMin == YES) {
+                center2.x = (CGRectGetWidth(self.view.frame) / 2.0f) + _leftSidebarWidth;
             }
             
             _viewContainerMain.center = center2;
@@ -469,7 +485,10 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         if (isAtMax == YES) {
             center.x = _rightSidebarWidth + (CGRectGetWidth(_viewContainerRight.frame) / 2.0f);
         }
-        
+        BOOL isAtMin = (center.x - (CGRectGetWidth(_viewContainerRight.frame) / 2.0f)) < 0.0f;
+        if (isAtMin == YES) {
+            center.x = (CGRectGetWidth(_viewContainerRight.frame) / 2.0f);
+        }
         pgr.view.center = center;
         
         if (_slideMainViewWithRightSidebar == YES) {
@@ -479,6 +498,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                                  center2.y);
             if (isAtMax == YES) {
                 center2.x = CGRectGetWidth(_viewContainerMain.frame) / 2.0f;
+            }
+            if (isAtMin == YES) {
+                center2.x = (CGRectGetWidth(self.view.frame) - _rightSidebarWidth) - (CGRectGetWidth(_viewContainerMain.frame) / 2.0f);
             }
             _viewContainerMain.center = center2;
         }
