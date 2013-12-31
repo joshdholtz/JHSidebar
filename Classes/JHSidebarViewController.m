@@ -24,6 +24,8 @@
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureLeftSidebar;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRightSidebar;
 
+@property (nonatomic, assign) CGPoint panGestureStartPoint;
+@property (nonatomic, strong) UIPanGestureRecognizer *panGestureMain;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureLeftSidebar;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRightSidebar;
 
@@ -175,7 +177,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 - (void)enablePanGesture {
  
-    // Adidng pan gesture to close left sidebar
+    // Adidng pan gesture to left sidebar
     if (_panGestureLeftSidebar == nil) {
         
         [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
@@ -184,12 +186,21 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         }];
     }
     
-    // Adidng pan gesture to close right sidebar
+    // Adidng pan gesture to right sidebar
     if (_panGestureRightSidebar == nil) {
         
         [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
             sidebarViewController.panGestureRightSidebar = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanRightSidebar:)];
             [sidebarViewController.viewContainerRight addGestureRecognizer:sidebarViewController.panGestureRightSidebar];
+        }];
+    }
+    
+    // Adidng pan gesture to main
+    if (_panGestureMain == nil) {
+        
+        [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
+            sidebarViewController.panGestureMain = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanMain:)];
+            [sidebarViewController.viewContainerMain addGestureRecognizer:sidebarViewController.panGestureMain];
         }];
     }
     
@@ -211,6 +222,8 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 }
 
 - (void)showLeftSidebar:(BOOL)show {
+    if (_leftViewController == nil) return;
+    
     // Initializes left sidebar view if not already attached
     [self attachLeftSidebar];
     
@@ -251,6 +264,8 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 }
 
 - (void)showRightSidebar:(BOOL)show {
+    if (_rightViewController == nil) return;
+    
     // Initializes right sidebar view if not already attached
     [self attachRightSidebar];
     
@@ -386,10 +401,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
                              center.y);
         pgr.view.center = center;
         [pgr setTranslation:CGPointZero inView:pgr.view.superview];
-        
-        CGPoint topLeft = pgr.view.frame.origin;
-        topLeft = CGPointMake(topLeft.x + translation.x,
-                              topLeft.y);
 
     } else if (pgr.state == UIGestureRecognizerStateEnded) {
         [self showLeftSidebar:[self isLeftMoreOpenThanClosed]];
@@ -407,12 +418,63 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         pgr.view.center = center;
         [pgr setTranslation:CGPointZero inView:pgr.view.superview];
         
-        CGPoint topLeft = pgr.view.frame.origin;
-        topLeft = CGPointMake(topLeft.x + translation.x,
-                              topLeft.y);
-        
     } else if (pgr.state == UIGestureRecognizerStateEnded) {
         [self showRightSidebar:[self isRightMoreOpenThanClosed]];
+    }
+}
+
+- (void)onPanMain:(UIPanGestureRecognizer*)pgr {
+    if (pgr.state == UIGestureRecognizerStateBegan) {
+        [self attachLeftSidebar];
+        [self attachRightSidebar];
+        
+        _panGestureStartPoint = [pgr locationInView:_viewContainerMain];
+    } else if (pgr.state == UIGestureRecognizerStateChanged) {
+        
+        if ((CGRectGetWidth(self.view.frame) / 2.0f) > _panGestureStartPoint.x) {
+            if (_leftViewController != nil) {
+                // Translations main
+                if (_slideMainViewWithLeftSidebar == YES) {
+                    CGPoint center = pgr.view.center;
+                    CGPoint translation = [pgr translationInView:pgr.view.superview];
+                    center = CGPointMake(center.x + translation.x,
+                                         center.y);
+                    pgr.view.center = center;
+                }
+                
+                CGPoint center = _viewContainerLeft.center;
+                CGPoint translation = [pgr translationInView:_viewContainerLeft];
+                center = CGPointMake(center.x + translation.x,
+                                     center.y);
+                _viewContainerLeft.center = center;
+                [pgr setTranslation:CGPointZero inView:_viewContainerLeft];
+            }
+        } else {
+            if (_rightViewController != nil) {
+                // Translations main
+                if (_slideMainViewWithRightSidebar == YES) {
+                    CGPoint center = pgr.view.center;
+                    CGPoint translation = [pgr translationInView:pgr.view.superview];
+                    center = CGPointMake(center.x + translation.x,
+                                         center.y);
+                    pgr.view.center = center;
+                }
+                
+                CGPoint center = _viewContainerRight.center;
+                CGPoint translation = [pgr translationInView:_viewContainerRight];
+                center = CGPointMake(center.x + translation.x,
+                                     center.y);
+                _viewContainerRight.center = center;
+                [pgr setTranslation:CGPointZero inView:_viewContainerRight];
+            }
+        }
+        
+    } else if (pgr.state == UIGestureRecognizerStateEnded) {
+        if ((CGRectGetWidth(self.view.frame) / 2.0f) > _panGestureStartPoint.x) {
+            [self showLeftSidebar:[self isLeftMoreOpenThanClosed]];
+        } else {
+            [self showRightSidebar:[self isRightMoreOpenThanClosed]];
+        }
     }
 }
 

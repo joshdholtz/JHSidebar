@@ -22,6 +22,7 @@
 
     [self.sidebarViewController enableTapGesture];
     [self.sidebarViewController enablePanGesture];
+    [self.sidebarViewController setSlideMainViewWithLeftSidebar:YES];
 }
 
 - (void)didReceiveMemoryWarning
