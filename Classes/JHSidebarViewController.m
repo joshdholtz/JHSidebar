@@ -388,8 +388,13 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Places an inner container (to the set width in the settings) inside the container view
         _viewContainerInnerLeft = [[UIView alloc] initWithFrame:_viewContainerLeft.frame];
+        [_viewContainerInnerLeft setUserInteractionEnabled:YES];
         [_viewContainerInnerLeft setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
         [_viewContainerLeft addSubview:_viewContainerInnerLeft];
+        
+        UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapNone:)];
+        [tgr setDelegate:self];
+        [_viewContainerInnerLeft addGestureRecognizer:tgr];
         
         CGRect frame = _viewContainerInnerLeft.frame;
         frame.origin.x = _leftSidebarWidth - _viewContainerInnerLeft.frame.size.width;
@@ -399,6 +404,13 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Adds left view controller subview
         [_viewContainerInnerLeft addSubview:_leftViewController.view];
+        
+        // Shrinking size of sidebar to set size
+        CGRect frameSidebar = _leftViewController.view.frame;
+        CGFloat maxX = CGRectGetMaxX(frameSidebar);
+        frameSidebar.size.width = _leftSidebarWidth;
+        frameSidebar.origin.x = maxX - _leftSidebarWidth;
+        [_leftViewController.view setFrame:frameSidebar];
     }
 }
 
@@ -411,8 +423,13 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Places an inner container (to the set width in the settings) inside the container view
         _viewContainerInnerRight = [[UIView alloc] initWithFrame:_viewContainerRight.frame];
+        [_viewContainerInnerRight setUserInteractionEnabled:YES];
         [_viewContainerInnerRight setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
         [_viewContainerRight addSubview:_viewContainerInnerRight];
+        
+        UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapNone:)];
+        [tgr setDelegate:self];
+        [_viewContainerInnerRight addGestureRecognizer:tgr];
         
         CGRect frame = _viewContainerInnerRight.frame;
         frame.origin.x = CGRectGetWidth(_viewContainerInnerRight.frame) - _rightSidebarWidth;
@@ -422,6 +439,12 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Adds right view controller subview
         [_viewContainerInnerRight addSubview:_rightViewController.view];
+        
+        // Shrinking size of sidebar to set size
+        CGRect frameSidebar = _rightViewController.view.frame;
+        frameSidebar.size.width = _rightSidebarWidth;
+        frameSidebar.origin.x = 0;
+        [_rightViewController.view setFrame:frameSidebar];
     }
 }
 
@@ -459,7 +482,12 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 }
 
 - (void)onTapCloseRightSidebar:(id)sender {
+    NSLog(@"RIGHT");
     [self showRightSidebar:NO];
+}
+
+- (void)onTapNone:(id)sender {
+    NSLog(@"NONE");
 }
 
 - (void)onPanLeftSidebar:(UIPanGestureRecognizer*)pgr {
