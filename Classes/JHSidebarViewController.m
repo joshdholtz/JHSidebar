@@ -86,17 +86,20 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    CGRect frame = self.view.frame;
-    
     // Creating left container view (same size as self.view)
     if (_viewContainerLeft == nil) {
+        CGRect frame = self.view.frame;
+        
         _viewContainerLeft = [[UIView alloc] initWithFrame:CGRectMake(-CGRectGetWidth(frame), CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame))];
         [_viewContainerLeft setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     }
     
     // Creating right container view (same size as self.view)
     if (_viewContainerRight == nil) {
+        CGRect frame = [self frameForOrientation:self.view];;
+        
         _viewContainerRight = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(frame), CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame))];
+        [_viewContainerRight setBackgroundColor:[UIColor yellowColor]];
         [_viewContainerRight setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     }
     
@@ -473,6 +476,19 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         [_viewContainerRight setHidden:NO];
     }
     
+}
+
+- (CGRect)frameForOrientation:(UIView*)view {
+    CGPoint point = view.frame.origin;
+    CGFloat width = CGRectGetWidth(view.frame);
+    CGFloat height = CGRectGetHeight(view.frame);
+    
+    if (!UIDeviceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
+        return CGRectMake(point.x, point.y, width, height);
+    }
+    else {
+        return CGRectMake(point.y, point.x, height, width);
+    }
 }
 
 #pragma mark - Actions
