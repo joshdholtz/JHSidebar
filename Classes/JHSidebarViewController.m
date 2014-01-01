@@ -99,7 +99,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         CGRect frame = [self frameForOrientation:self.view];;
         
         _viewContainerRight = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(frame), CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame))];
-        [_viewContainerRight setBackgroundColor:[UIColor yellowColor]];
         [_viewContainerRight setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     }
     
