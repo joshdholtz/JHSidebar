@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "JHSidebar"
-  s.version      = "0.0.1"
+  s.version      = "0.1.0"
   s.summary      = "A customizable sidebar for iOS."
   s.description  = <<-DESC
                     Probably just another sidebar library but this is the way I wanted them implemented.
