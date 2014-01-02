@@ -257,7 +257,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             [_viewContainerLeft setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
-            
+            if ([_delegate respondsToSelector:@selector(sidebar:stateChanged:)]) {
+                [_delegate sidebar:JHSidebarLeft stateChanged:JHSidebarOpen];
+            }
         }];
     } else {
         
@@ -274,6 +276,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
             [self hideLeftSidebar:YES];
+            if ([_delegate respondsToSelector:@selector(sidebar:stateChanged:)]) {
+                [_delegate sidebar:JHSidebarLeft stateChanged:JHSidebarClosed];
+            }
         }];
     }
 }
@@ -300,7 +305,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             [_viewContainerRight setFrame:frame];
             [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
-            
+            if ([_delegate respondsToSelector:@selector(sidebar:stateChanged:)]) {
+                [_delegate sidebar:JHSidebarRight stateChanged:JHSidebarOpen];
+            }
         }];
     } else {
 
@@ -317,6 +324,9 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
             [_viewContainerMain setFrame:mainFrame];
         } completion:^(BOOL finished) {
             [self hideRightSidebar:YES];
+            if ([_delegate respondsToSelector:@selector(sidebar:stateChanged:)]) {
+                [_delegate sidebar:JHSidebarRight stateChanged:JHSidebarClosed];
+            }
         }];
     }
 }

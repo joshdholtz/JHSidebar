@@ -10,7 +10,7 @@
 
 #import "JHSidebarViewController.h"
 
-@interface ViewController ()
+@interface ViewController ()<JHSidebarDelegate>
 
 @end
 
@@ -20,10 +20,10 @@
 {
     [super viewDidLoad];
 
+    [self.sidebarViewController setDelegate:self];
     [self.sidebarViewController enableTapGesture];
     [self.sidebarViewController enablePanGesture];
     [self.sidebarViewController setSlideMainViewWithLeftSidebar:YES];
-    [self.sidebarViewController setSlideMainViewWithRightSidebar:YES];
     
     [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"399-list1"] style:UIBarButtonItemStylePlain target:self action:@selector(onClickLeft:)]];
     
@@ -35,6 +35,14 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - JHSidebarDelegate
+
+- (void)sidebar:(JHSidebarSide)side stateChanged:(JHSidebarState)state {
+    NSLog(@"%@ is %@", (side == JHSidebarLeft ? @"Left Sidebar" : @"Right Sidebar"), (state == JHSidebarOpen ? @"Open" : @"Close"));
+}
+
+#pragma mark - Actions
 
 - (void)onClickLeft:(id)sender {
     [self.sidebarViewController toggleLeftSidebar];

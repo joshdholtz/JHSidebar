@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    JHSidebarLeft, JHSidebarRight
+} JHSidebarSide;
+
+typedef enum {
+    JHSidebarOpen, JHSidebarClosed
+} JHSidebarState;
+
+@protocol JHSidebarDelegate;
+
 @interface JHSidebarViewController : UIViewController
 
 @property (nonatomic, strong) UIViewController *mainViewController;
@@ -22,6 +32,8 @@
 @property (nonatomic, assign) CGFloat rightCloseAnimationLength;
 @property (nonatomic, assign) NSInteger leftSidebarWidth;
 @property (nonatomic, assign) NSInteger rightSidebarWidth;
+
+@property (nonatomic, assign) id<JHSidebarDelegate> delegate;
 
 - (void)enableTapGesture;
 - (void)enablePanGesture;
@@ -40,3 +52,8 @@
 
 @end
 
+@protocol JHSidebarDelegate <NSObject>
+
+- (void)sidebar:(JHSidebarSide)side stateChanged:(JHSidebarState)state;
+
+@end
