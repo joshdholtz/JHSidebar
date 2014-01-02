@@ -1,12 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = "JHSidebar"
   s.version      = "0.0.1"
-  s.summary      = "JHSidebar cause I can."
+  s.summary      = "A customizable sidebar for iOS."
   s.description  = <<-DESC
-                    Just another sidebar implementation.
+                    Probably just another sidebar library but this is the way I wanted them implemented.
                    DESC
   s.homepage     = "https://github.com/joshdholtz/JHSidebar"
-  # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license      = 'MIT'
   s.author       = { "Josh Holtz" => "me@joshholtz" }
   s.source       = { :git => "https://github.com/joshdholtz/JHSidebar.git", :tag => s.version.to_s }
