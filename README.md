@@ -8,6 +8,9 @@ Probably just another sidebar library but this is the way I wanted them implemen
 - Configure sidebars to slide over the main view or slide with the main view
 - Configure the width of the sidebars
 - Configure sidebar open and close animation time
+- Enable pan gestures for opening and closing sidebars
+- Enable tap gesture to close sidebars
+- Optional delegate for listening when the sidebars are opened or closed
 - Access the JHSidebarViewController from any UIViewController by importing `#import <JHSidebar/JHSidebarViewController.h>`
 
 ## Installation
