@@ -34,17 +34,9 @@
 
 @end
 
-// We add a category of UIViewController to let childViewControllers easily access their parent SWRevealViewController
 @interface UIViewController(JHSidebarViewController)
 
 - (JHSidebarViewController*)sidebarViewController;
 
 @end
 
-#pragma mark - JHSidebarStoryboardSegue
-
-@interface JHSidebarStoryboardSegue : UIStoryboardSegue
-
-@property (strong) void(^performBlock)( JHSidebarStoryboardSegue* segue, UIViewController* sourceViewController, UIViewController* destinationViewController );
-
-@end

@@ -137,7 +137,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     
 }
 
-- (void)prepareForSegue:(JHSidebarStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:kJHSidebarMain]) {
         [self setMainViewController:segue.destinationViewController];
@@ -690,14 +690,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     }
     
     return (id)parent;
-}
-
-@end
-
-@implementation JHSidebarStoryboardSegue
-
-- (void)perform {
-    
 }
 
 @end
