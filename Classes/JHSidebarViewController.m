@@ -88,7 +88,8 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     
     // Creating left container view (same size as self.view)
     if (_viewContainerLeft == nil) {
-        CGRect frame = self.view.frame;
+        CGRect windowRect = [[UIScreen mainScreen] bounds];
+        CGRect frame = windowRect;
         
         _viewContainerLeft = [[UIView alloc] initWithFrame:CGRectMake(-CGRectGetWidth(frame), CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame))];
         [_viewContainerLeft setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -96,7 +97,8 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     
     // Creating right container view (same size as self.view)
     if (_viewContainerRight == nil) {
-        CGRect frame = [self frameForOrientation:self.view];;
+        CGRect windowRect = [[UIScreen mainScreen] bounds];
+        CGRect frame = windowRect;
         
         _viewContainerRight = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(frame), CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame))];
         [_viewContainerRight setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -339,7 +341,8 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     _mainViewController = mainViewController;
     [self addChildViewController:self.mainViewController];
     
-    _viewContainerMain = [[UIView alloc] initWithFrame:self.view.frame];
+    CGRect windowRect = [[UIScreen mainScreen] bounds];
+    _viewContainerMain = [[UIView alloc] initWithFrame:windowRect];
     [_viewContainerMain setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self.view insertSubview:_viewContainerMain atIndex:0];
     
@@ -419,6 +422,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         // Shrinking size of sidebar to set size
         CGRect frameSidebar = _leftViewController.view.frame;
         CGFloat maxX = CGRectGetMaxX(frameSidebar);
+        frameSidebar.origin.y = 0;
         frameSidebar.size.width = _leftSidebarWidth;
         frameSidebar.origin.x = maxX - _leftSidebarWidth;
         [_leftViewController.view setFrame:frameSidebar];
@@ -453,6 +457,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         
         // Shrinking size of sidebar to set size
         CGRect frameSidebar = _rightViewController.view.frame;
+        frameSidebar.origin.y = 0;
         frameSidebar.size.width = _rightSidebarWidth;
         frameSidebar.origin.x = 0;
         [_rightViewController.view setFrame:frameSidebar];
