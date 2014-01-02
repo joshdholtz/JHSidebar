@@ -23,6 +23,7 @@
     [self.sidebarViewController enableTapGesture];
     [self.sidebarViewController enablePanGesture];
     [self.sidebarViewController setSlideMainViewWithLeftSidebar:YES];
+    [self.sidebarViewController setSlideMainViewWithRightSidebar:YES];
     
     [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"399-list1"] style:UIBarButtonItemStylePlain target:self action:@selector(onClickLeft:)]];
     
