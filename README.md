@@ -4,7 +4,7 @@ Probably just another sidebar library but this is the way I wanted them implemen
 
 ## Features
 
-- Use through **storyboard segues** or good old fashion **code** (see examples below)
+- Use through Storyboard scenes or good old fashion **code** (see examples below)
 - Configure sidebars to slide over the main view or slide with the main view
 - Configure the width of the sidebars
 - Configure sidebar open and close animation time
@@ -20,8 +20,7 @@ Clone the repository and drop in the .h and .m files from the "Classes" director
 
 ### CocoaPods
 
-JSONAPI is available through [CocoaPods](http://cocoapods.org), to install
-it simply add the following line to your Podfile:
+JSONAPI is available through [CocoaPods](http://cocoapods.org), to install it simply add the following line to your Podfile:
 
     pod 'JHSidebar', '~> 0.1.1'
 
@@ -55,15 +54,25 @@ it simply add the following line to your Podfile:
 
 ````
 
-### Setup - Storyboard Segues
+### Setup - Storyboard
 
-The main view, left sidebar, and right sidebar can be set up with ONLY segues if that is the route you want to choose.
-All you need to do is define the following custom segue identifiers
-- JHSidebarMain (required)
-- JHSidebarLeft (optional)
-- JHSidebarRight (optional)
+The main view, left sidebar, and right sidebar can be set up by naming scenes with the following default identifiers.
 
-![](https://raw.github.com/joshdholtz/JHSidebar/master/Doc/example_segue.png)
+- JHMainView
+- JHLeftSidebar
+- JHRightSidebar
+
+These are the default identifiers used to instantiate these view controllers from the Storyboard. If you'd like to override them or not use one you can override the following methods.
+
+````objc
+    - (UIViewController *)instantiateMainViewController; // override
+    - (UIViewController *)instantiateLeftViewController; // override
+    - (UIViewController *)instantiateRightViewController; // override
+````
+
+Either return a view controller or nil.
+
+![](https://raw.github.com/joshdholtz/JHSidebar/master/Doc/example_storyboard.png)
 
 ### Setup - Good Old Fashion Code
 

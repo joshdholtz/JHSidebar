@@ -44,6 +44,10 @@ typedef enum {
 - (void)showLeftSidebar:(BOOL)show;
 - (void)showRightSidebar:(BOOL)show;
 
+- (UIViewController *)instantiateMainViewController; // override
+- (UIViewController *)instantiateLeftViewController; // override
+- (UIViewController *)instantiateRightViewController; // override
+
 @end
 
 @interface UIViewController(JHSidebarViewController)
