@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Josh Holtz. All rights reserved.
 //
 
-#define kJHSidebarMain @"JHSidebarMain"
-#define kJHSidebarLeft @"JHSidebarLeft"
-#define kJHSidebarRight @"JHSidebarRight"
+#define kSidebarMainIdentifier         @"JHMainView"
+#define kSidebarLeftIdentifier         @"JHLeftSidebar"
+#define kSidebarRightIdentifier        @"JHRightSidebar"
 
 #import "JHSidebarViewController.h"
 
@@ -53,8 +53,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     return self;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self setup];
@@ -63,7 +62,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 }
 
 - (void)setup {
-    _operationQueue = [NSMutableArray array];
+    _operationQueue = [@[] mutableCopy];
     
     _slideMainViewWithLeftSidebar = NO;
     _slideMainViewWithRightSidebar = NO;
@@ -77,8 +76,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     _rightSidebarWidth = 270.0f;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 }
@@ -110,43 +108,28 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     [_operationQueue removeAllObjects];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)loadView
-{
+- (void)loadView {
+    
     [super loadView];
-    // Load main view and sidebar views from storyboard
-    if (self.storyboard && _mainViewController == nil){
-        // Trying main sequeue
-        @try {
-            [self performSegueWithIdentifier:kJHSidebarMain sender:nil];
-        } @catch(NSException *exception) { }
-        
-        // Trying left sequeue
-        @try {
-            [self performSegueWithIdentifier:kJHSidebarLeft sender:nil];
-        } @catch(NSException *exception) { }
-        
-        // Trying right sequeue
-        @try {
-            [self performSegueWithIdentifier:kJHSidebarRight sender:nil];
-        } @catch(NSException *exception) { }
-    }
     
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
-    if ([segue.identifier isEqualToString:kJHSidebarMain]) {
-        [self setMainViewController:segue.destinationViewController];
-    } else if ([segue.identifier isEqualToString:kJHSidebarLeft]) {
-        [self setLeftViewController:segue.destinationViewController];
-    } if ([segue.identifier isEqualToString:kJHSidebarRight]) {
-        [self setRightViewController:segue.destinationViewController];
+    if (_mainViewController == nil){
+        UIViewController *mainVC = [self instantiateMainViewController];
+        if (mainVC) {
+            [self setMainViewController:mainVC];
+        }
+        UIViewController *leftVC = [self instantiateLeftViewController];
+        if (leftVC) {
+            [self setLeftViewController:leftVC];
+        }
+        UIViewController *rightVC = [self instantiateRightViewController];
+        if (rightVC) {
+            [self setRightViewController:rightVC];
+        }
     }
     
 }
@@ -161,7 +144,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 - (void)enableTapGesture {
     
-    // Adidng tap gesture to close left sidebar
+    // Adding tap gesture to close left sidebar
     if (_tapGestureLeftSidebar == nil) {
         
         [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
@@ -170,7 +153,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         }];
     }
     
-    // Adidng tap gesture to close right sidebar
+    // Adding tap gesture to close right sidebar
     if (_tapGestureRightSidebar == nil) {
         
         [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
@@ -333,6 +316,18 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     }
 }
 
+- (UIViewController *)instantiateMainViewController {
+    return [self.storyboard instantiateViewControllerWithIdentifier:kSidebarMainIdentifier];
+}
+
+- (UIViewController *)instantiateLeftViewController {
+    return [self.storyboard instantiateViewControllerWithIdentifier:kSidebarLeftIdentifier];
+}
+
+- (UIViewController *)instantiateRightViewController {
+    return [self.storyboard instantiateViewControllerWithIdentifier:kSidebarRightIdentifier];
+}
+
 #pragma mark - Setting views
 
 - (void)setMainViewController:(UIViewController *)mainViewController {
@@ -395,7 +390,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 - (void)attachLeftSidebar {
     if (_viewContainerInnerLeft == nil) {
-        
         CGRect frameContainer = _viewContainerLeft.frame;
         frameContainer.origin.x = -_leftSidebarWidth;
         [_viewContainerLeft setFrame:frameContainer];
@@ -431,7 +425,6 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 - (void)attachRightSidebar {
     if (_viewContainerInnerRight == nil) {
-        
         CGRect frameContainer = _viewContainerRight.frame;
         frameContainer.origin.x = _rightSidebarWidth;
         [_viewContainerRight setFrame:frameContainer];
@@ -467,12 +460,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 - (void)hideLeftSidebar:(BOOL)hide {
     if (hide == YES) {
         [_viewContainerLeft setHidden:YES];
-//        _viewContainerLeft.center = _viewContainerMain.center;
     } else {
-//        CGRect frame = _viewContainerLeft.frame;
-//        frame.origin.x = -_leftSidebarWidth;
-//        [_viewContainerLeft setFrame:frame];
-        
         [_viewContainerLeft setHidden:NO];
     }
 }
@@ -480,12 +468,8 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 - (void)hideRightSidebar:(BOOL)hide {
     if (hide == YES) {
         [_viewContainerRight setHidden:YES];
-//        _viewContainerLeft.center = _viewContainerMain.center;
     } else {
-//        CGRect frame = _viewContainerRight.frame;
-//        frame.origin.x = _rightSidebarWidth;
-//        [_viewContainerRight setFrame:frame];
-        
+
         [_viewContainerRight setHidden:NO];
     }
     
@@ -695,8 +679,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 @implementation UIViewController(JHSidebarViewController)
 
-- (JHSidebarViewController*)sidebarViewController
-{
+- (JHSidebarViewController*)sidebarViewController {
     UIViewController *parent = self;
     Class revealClass = [JHSidebarViewController class];
     

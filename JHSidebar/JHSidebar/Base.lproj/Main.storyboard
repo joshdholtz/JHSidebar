@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--Sidebar View Controller-->
@@ -14,15 +14,10 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <connections>
-                        <segue destination="ldr-F8-axn" kind="custom" identifier="JHSidebarMain" id="gCb-b8-20l"/>
-                        <segue destination="6vV-l9-AAT" kind="custom" identifier="JHSidebarLeft" id="i5s-h1-Nhy"/>
-                        <segue destination="Oi0-Lt-cBq" kind="custom" identifier="JHSidebarRight" id="fuw-pS-oV8"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="104" y="194"/>
+            <point key="canvasLocation" x="264" y="194"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="5mZ-dJ-Xwa">
@@ -51,7 +46,7 @@
         <!--View Controller-->
         <scene sceneID="dn6-60-V1c">
             <objects>
-                <viewController id="6vV-l9-AAT" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JHLeftSidebar" id="6vV-l9-AAT" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f0G-7z-y4K">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -74,7 +69,7 @@
         <!--View Controller-->
         <scene sceneID="5tM-o5-vmo">
             <objects>
-                <viewController id="Oi0-Lt-cBq" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JHRightSidebar" id="Oi0-Lt-cBq" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hbu-DT-z7a">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -92,12 +87,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wxc-b6-jyi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="795" y="776"/>
+            <point key="canvasLocation" x="795" y="798"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="n7Y-4g-eHu">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ldr-F8-axn" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="JHMainView" automaticallyAdjustsScrollViewInsets="NO" id="ldr-F8-axn" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="O58-LZ-Q4L">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
