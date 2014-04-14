@@ -108,6 +108,15 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     [_operationQueue removeAllObjects];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    UIViewController *viewController = self.mainViewController;
+    if ([viewController respondsToSelector:@selector(preferredStatusBarStyle)]) {
+        return [viewController preferredStatusBarStyle];
+    }
+    
+    return UIStatusBarStyleDefault;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
