@@ -117,6 +117,15 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     return UIStatusBarStyleDefault;
 }
 
+- (BOOL)prefersStatusBarHidden {
+    UIViewController *viewController = self.mainViewController;
+    if ([viewController respondsToSelector:@selector(prefersStatusBarHidden)]) {
+        return [viewController prefersStatusBarHidden];
+    }
+    
+    return NO;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
