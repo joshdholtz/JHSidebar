@@ -33,6 +33,9 @@ typedef enum {
 @property (nonatomic, assign) NSInteger leftSidebarWidth;
 @property (nonatomic, assign) NSInteger rightSidebarWidth;
 
+@property (nonatomic, assign, getter=isLeftSidebarTapGestureEnabled) BOOL leftSidebarTapGestureEnabled;
+@property (nonatomic, assign, getter=isRightSidebarTapGestureEnabled) BOOL rightSidebarTapGestureEnabled;
+
 @property (nonatomic, assign) id<JHSidebarDelegate> delegate;
 
 - (void)enableTapGesture;

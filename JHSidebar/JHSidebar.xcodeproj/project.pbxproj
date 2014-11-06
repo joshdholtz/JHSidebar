@@ -25,6 +25,7 @@
 		03F2D9901872363500C69576 /* JHSidebarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F2D98F1872363500C69576 /* JHSidebarTests.m */; };
 		03F2D99A1872364300C69576 /* JHSidebar.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 03F2D9991872364300C69576 /* JHSidebar.podspec */; };
 		03F2D9A5187237DE00C69576 /* JHSidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F2D9A4187237DE00C69576 /* JHSidebarViewController.m */; };
+		26A694771A0C15770065C87C /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A694761A0C15770065C87C /* RightViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,8 @@
 		03F2D9991872364300C69576 /* JHSidebar.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = JHSidebar.podspec; path = ../JHSidebar.podspec; sourceTree = "<group>"; };
 		03F2D9A3187237DE00C69576 /* JHSidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JHSidebarViewController.h; sourceTree = "<group>"; };
 		03F2D9A4187237DE00C69576 /* JHSidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JHSidebarViewController.m; sourceTree = "<group>"; };
+		26A694751A0C15770065C87C /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
+		26A694761A0C15770065C87C /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +131,8 @@
 				03F2D9761872363500C69576 /* Main.storyboard */,
 				03F2D9791872363500C69576 /* ViewController.h */,
 				03F2D97A1872363500C69576 /* ViewController.m */,
+				26A694751A0C15770065C87C /* RightViewController.h */,
+				26A694761A0C15770065C87C /* RightViewController.m */,
 				03AEA6ED1873582900913CCD /* 399-list1.png */,
 				03AEA6EE1873582900913CCD /* 399-list1@2x.png */,
 				03F2D97C1872363500C69576 /* Images.xcassets */,
@@ -275,6 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26A694771A0C15770065C87C /* RightViewController.m in Sources */,
 				03F2D97B1872363500C69576 /* ViewController.m in Sources */,
 				03F2D9751872363500C69576 /* AppDelegate.m in Sources */,
 				03F2D9711872363500C69576 /* main.m in Sources */,
