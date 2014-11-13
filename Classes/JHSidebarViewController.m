@@ -12,7 +12,7 @@
 
 #import "JHSidebarViewController.h"
 
-@interface JHSidebarViewController ()<UIGestureRecognizerDelegate>
+@interface JHSidebarViewController () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *viewContainerMain;
 @property (nonatomic, strong) UIView *viewContainerLeft;
@@ -158,25 +158,43 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     return NO;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([gestureRecognizer isEqual:_tapGestureLeftSidebar]) {
+        // point must be right of the left sidebar (in the open space)
+        CGPoint point = [touch locationInView:self.view];
+        return point.x > _leftSidebarWidth;
+    }
+    else if ([gestureRecognizer isEqual:_tapGestureRightSidebar]) {
+        // point must be left of the right sidebar (in the open space)
+        CGPoint point = [touch locationInView:self.view];
+        CGFloat width = CGRectGetWidth(self.view.frame) - _rightSidebarWidth;
+        return point.x < width;
+    }
+
+    return YES;
+}
+
 #pragma mark - Public
 
 - (void)enableTapGesture {
     
     // Adding tap gesture to close left sidebar
     if (_tapGestureLeftSidebar == nil) {
-        
-        [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
-            sidebarViewController.tapGestureLeftSidebar = [[UITapGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onTapCloseLeftSidebar:)];
-            [sidebarViewController.viewContainerLeft addGestureRecognizer:sidebarViewController.tapGestureLeftSidebar];
+        [_operationQueue addObject:^(JHSidebarViewController *sidebarViewController){
+            UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onTapCloseLeftSidebar:)];
+            tgr.delegate = sidebarViewController;
+            [sidebarViewController.viewContainerLeft addGestureRecognizer:tgr];
+            sidebarViewController.tapGestureLeftSidebar = tgr;
         }];
     }
     
     // Adding tap gesture to close right sidebar
     if (_tapGestureRightSidebar == nil) {
-        
-        [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
-            sidebarViewController.tapGestureRightSidebar = [[UITapGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onTapCloseRightSidebar:)];
-            [sidebarViewController.viewContainerRight addGestureRecognizer:sidebarViewController.tapGestureRightSidebar];
+        [_operationQueue addObject:^(JHSidebarViewController *sidebarViewController){
+            UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onTapCloseRightSidebar:)];
+            tgr.delegate = sidebarViewController;
+            [sidebarViewController.viewContainerRight addGestureRecognizer:tgr];
+            sidebarViewController.tapGestureRightSidebar = tgr;
         }];
     }
     
@@ -190,10 +208,10 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 
 - (void)enablePanGesture {
  
-    // Adidng pan gesture to left sidebar
+    // Adding pan gesture to left sidebar
     if (_panGestureLeftSidebar == nil) {
         
-        [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
+        [_operationQueue addObject:^(JHSidebarViewController *sidebarViewController){
             sidebarViewController.panGestureLeftSidebar = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanLeftSidebar:)];
             [sidebarViewController.panGestureLeftSidebar setDelegate:sidebarViewController];
             [sidebarViewController.viewContainerLeft addGestureRecognizer:sidebarViewController.panGestureLeftSidebar];
@@ -203,7 +221,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     // Adidng pan gesture to right sidebar
     if (_panGestureRightSidebar == nil) {
         
-        [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
+        [_operationQueue addObject:^(JHSidebarViewController *sidebarViewController){
             sidebarViewController.panGestureRightSidebar = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanRightSidebar:)];
             [sidebarViewController.panGestureRightSidebar setDelegate:sidebarViewController];
             [sidebarViewController.viewContainerRight addGestureRecognizer:sidebarViewController.panGestureRightSidebar];
@@ -213,7 +231,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
     // Adidng pan gesture to main
     if (_panGestureMain == nil) {
         
-        [_operationQueue addObject:^(JHSidebarViewController* sidebarViewController){
+        [_operationQueue addObject:^(JHSidebarViewController *sidebarViewController){
             [sidebarViewController.viewContainerMain setUserInteractionEnabled:YES];
             sidebarViewController.panGestureMain = [[UIPanGestureRecognizer alloc] initWithTarget:sidebarViewController action:@selector(onPanMain:)];
             [sidebarViewController.panGestureMain setDelegate:sidebarViewController];
@@ -418,9 +436,11 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         [_viewContainerInnerLeft setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
         [_viewContainerLeft addSubview:_viewContainerInnerLeft];
         
-        UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapNone:)];
-        [tgr setDelegate:self];
-        [_viewContainerInnerLeft addGestureRecognizer:tgr];
+        if (_leftSidebarTapGestureEnabled) {
+            UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapNone:)];
+            [tgr setDelegate:self];
+            [_viewContainerInnerLeft addGestureRecognizer:tgr];
+        }
         
         CGRect frame = _viewContainerInnerLeft.frame;
         frame.origin.x = _leftSidebarWidth - _viewContainerInnerLeft.frame.size.width;
@@ -452,10 +472,12 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
         [_viewContainerInnerRight setUserInteractionEnabled:YES];
         [_viewContainerInnerRight setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
         [_viewContainerRight addSubview:_viewContainerInnerRight];
-        
-        UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapNone:)];
-        [tgr setDelegate:self];
-        [_viewContainerInnerRight addGestureRecognizer:tgr];
+
+        if (_rightSidebarTapGestureEnabled) {
+            UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapNone:)];
+            [tgr setDelegate:self];
+            [_viewContainerInnerRight addGestureRecognizer:tgr];
+        }
         
         CGRect frame = _viewContainerInnerRight.frame;
         frame.origin.x = CGRectGetWidth(_viewContainerInnerRight.frame) - _rightSidebarWidth;
@@ -517,7 +539,7 @@ typedef void (^OperationBlock)(JHSidebarViewController *sidebarViewController);
 }
 
 - (void)onTapNone:(id)sender {
-
+    NSLog(@"None");
 }
 
 - (void)onPanLeftSidebar:(UIPanGestureRecognizer*)pgr {
