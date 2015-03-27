@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, JHSidebarSide) {
     JHSidebarLeft, JHSidebarRight
-} JHSidebarSide;
+};
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, JHSidebarState) {
     JHSidebarOpen, JHSidebarClosed
-} JHSidebarState;
+};
 
 @protocol JHSidebarDelegate;
 
